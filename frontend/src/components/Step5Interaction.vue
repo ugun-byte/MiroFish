@@ -299,13 +299,25 @@
               ref="chatInputRef"
             ></textarea>
             <button 
+              v-if="!isSending"
               class="send-btn"
               @click="sendMessage"
-              :disabled="!chatInput.trim() || isSending || (!selectedAgent && chatTarget === 'agent')"
+              :disabled="!chatInput.trim() || (!selectedAgent && chatTarget === 'agent')"
             >
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+            <button 
+              v-else
+              class="send-btn stop-btn"
+              @click="cancelMessage"
+              title="Stop generating"
+              style="background-color: #EF4444; color: white;"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="6" y="6" width="12" height="12"></rect>
               </svg>
             </button>
           </div>
@@ -441,6 +453,7 @@ const chatHistoryCache = ref({}) // 缓存所有对话记录: { 'report_agent': 
 const isSending = ref(false)
 const chatMessages = ref(null)
 const chatInputRef = ref(null)
+const abortController = ref(null)
 
 // Survey State
 const selectedAgents = ref(new Set())
@@ -657,6 +670,7 @@ const sendMessage = async () => {
   
   scrollToBottom()
   isSending.value = true
+  abortController.value = new AbortController()
   
   try {
     if (chatTarget.value === 'report_agent') {
@@ -665,17 +679,33 @@ const sendMessage = async () => {
       await sendToAgent(message)
     }
   } catch (err) {
-    addLog(t('log.sendFailed', { error: err.message }))
-    chatHistory.value.push({
-      role: 'assistant',
-      content: t('step5.errorOccurred', { error: err.message }),
-      timestamp: new Date().toISOString()
-    })
+    if (err.name === 'CanceledError') {
+      addLog(t('log.sendFailed', { error: 'Request canceled' }))
+      chatHistory.value.push({
+        role: 'assistant',
+        content: '상호작용이 취소되었습니다. (Canceled)',
+        timestamp: new Date().toISOString()
+      })
+    } else {
+      addLog(t('log.sendFailed', { error: err.message }))
+      chatHistory.value.push({
+        role: 'assistant',
+        content: t('step5.errorOccurred', { error: err.message }),
+        timestamp: new Date().toISOString()
+      })
+    }
   } finally {
     isSending.value = false
+    abortController.value = null
     scrollToBottom()
     // 自动保存对话记录到缓存
     saveChatHistory()
+  }
+}
+
+const cancelMessage = () => {
+  if (abortController.value) {
+    abortController.value.abort()
   }
 }
 
@@ -695,7 +725,7 @@ const sendToReportAgent = async (message) => {
     simulation_id: props.simulationId,
     message: message,
     chat_history: historyForApi
-  })
+  }, { signal: abortController.value.signal })
   
   if (res.success && res.data) {
     chatHistory.value.push({
@@ -733,7 +763,7 @@ const sendToAgent = async (message) => {
       agent_id: selectedAgentIndex.value,
       prompt: prompt
     }]
-  })
+  }, { signal: abortController.value.signal })
   
   if (res.success && res.data) {
     // 正确的数据路径: res.data.result.results 是一个对象字典

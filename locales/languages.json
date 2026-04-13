@@ -1,11 +1,15 @@
 {
-  "zh": {
-    "label": "中文",
-    "llmInstruction": "请使用中文回答。"
+  "ko": {
+    "label": "한국어",
+    "llmInstruction": "한국어로 답변해주세요."
   },
   "en": {
     "label": "English",
     "llmInstruction": "Please respond in English."
+  },
+  "zh": {
+    "label": "中文",
+    "llmInstruction": "请使用中文回答。"
   },
   "es": {
     "label": "Español",

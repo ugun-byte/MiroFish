@@ -987,6 +987,67 @@ def get_simulation_history():
         }), 500
 
 
+@simulation_bp.route('/<simulation_id>', methods=['DELETE'])
+def delete_simulation(simulation_id: str):
+    """
+    시뮬레이션 삭제
+    
+    시뮬레이션 데이터와 관련 리포트를 모두 삭제합니다.
+    
+    Returns:
+        {
+            "success": true,
+            "message": "시뮬레이션이 삭제되었습니다.",
+            "deleted_report": true|false
+        }
+    """
+    try:
+        manager = SimulationManager()
+        
+        # 시뮬레이션 존재 확인
+        state = manager.get_simulation(simulation_id)
+        if not state:
+            return jsonify({
+                "success": False,
+                "error": f"시뮬레이션을 찾을 수 없습니다: {simulation_id}"
+            }), 404
+        
+        # 연관된 리포트 삭제
+        deleted_report = False
+        report_id = _get_report_id_for_simulation(simulation_id)
+        if report_id:
+            try:
+                from ..services.report_agent import ReportManager
+                ReportManager.delete_report(report_id)
+                deleted_report = True
+                logger.info(f"연관 리포트 삭제: {report_id}")
+            except Exception as e:
+                logger.warning(f"리포트 삭제 실패 (무시): {e}")
+        
+        # 시뮬레이션 삭제
+        success = manager.delete_simulation(simulation_id)
+        
+        if not success:
+            return jsonify({
+                "success": False,
+                "error": f"시뮬레이션 삭제에 실패했습니다: {simulation_id}"
+            }), 500
+        
+        return jsonify({
+            "success": True,
+            "message": f"시뮬레이션이 삭제되었습니다: {simulation_id}",
+            "deleted_report": deleted_report
+        })
+        
+    except Exception as e:
+        logger.error(f"시뮬레이션 삭제 실패: {str(e)}")
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }), 500
+
+
 @simulation_bp.route('/<simulation_id>/profiles', methods=['GET'])
 def get_simulation_profiles(simulation_id: str):
     """

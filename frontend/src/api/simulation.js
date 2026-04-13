@@ -171,9 +171,11 @@ export const getEnvStatus = (data) => {
 /**
  * 批量采访 Agent
  * @param {Object} data - { simulation_id, interviews: [{ agent_id, prompt }] }
+ * @param {Object} config - Axios config options (e.g. signal for aborting)
  */
-export const interviewAgents = (data) => {
-  return requestWithRetry(() => service.post('/api/simulation/interview/batch', data), 3, 1000)
+export const interviewAgents = (data, config = {}) => {
+  // 对话请求不需要重试
+  return requestWithRetry(() => service.post('/api/simulation/interview/batch', data, config), 1, 0)
 }
 
 /**
@@ -185,3 +187,10 @@ export const getSimulationHistory = (limit = 20) => {
   return service.get('/api/simulation/history', { params: { limit } })
 }
 
+/**
+ * 시뮬레이션 삭제
+ * @param {string} simulationId - 삭제할 시뮬레이션 ID
+ */
+export const deleteSimulation = (simulationId) => {
+  return service.delete(`/api/simulation/${simulationId}`)
+}

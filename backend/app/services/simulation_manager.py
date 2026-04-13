@@ -478,6 +478,37 @@ class SimulationManager:
         
         return simulations
     
+    def delete_simulation(self, simulation_id: str) -> bool:
+        """
+        시뮬레이션 삭제 (디스크 데이터 + 메모리 캐시)
+        
+        Args:
+            simulation_id: 삭제할 시뮬레이션 ID
+            
+        Returns:
+            성공 여부
+        """
+        sim_dir = os.path.join(self.SIMULATION_DATA_DIR, simulation_id)
+        
+        if not os.path.exists(sim_dir):
+            logger.warning(f"삭제 대상 시뮬레이션 디렉토리 없음: {simulation_id}")
+            return False
+        
+        try:
+            # 디스크에서 시뮬레이션 폴더 전체 삭제
+            shutil.rmtree(sim_dir)
+            
+            # 메모리 캐시에서도 제거
+            if simulation_id in self._simulations:
+                del self._simulations[simulation_id]
+            
+            logger.info(f"시뮬레이션 삭제 완료: {simulation_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"시뮬레이션 삭제 실패: {simulation_id}, error={str(e)}")
+            raise
+
     def get_profiles(self, simulation_id: str, platform: str = "reddit") -> List[Dict[str, Any]]:
         """获取模拟的Agent Profile"""
         state = self._load_simulation_state(simulation_id)

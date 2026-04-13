@@ -32,7 +32,13 @@
         <!-- 卡片头部：simulation_id 和 功能可用状态 -->
         <div class="card-header">
           <span class="card-id">{{ formatSimulationId(project.simulation_id) }}</span>
-          <div class="card-status-icons">
+          <div class="card-header-right">
+            <button 
+              class="card-delete-btn" 
+              @click.stop="confirmDelete(project, $event)"
+              :title="$t('history.deleteProject')"
+            >×</button>
+            <div class="card-status-icons">
             <span 
               class="status-icon" 
               :class="{ available: project.project_id, unavailable: !project.project_id }"
@@ -47,6 +53,7 @@
               :class="{ available: project.report_id, unavailable: !project.report_id }"
               :title="$t('history.analysisReport')"
             >◆</span>
+            </div>
           </div>
         </div>
 
@@ -179,7 +186,18 @@
                 <span class="btn-text">{{ $t('history.step4Button') }}</span>
               </button>
             </div>
-            <!-- 不可回放提示 -->
+            <!-- 불가 회복 삭제 -->
+            <div class="modal-danger-zone">
+              <button 
+                class="modal-btn btn-delete" 
+                @click="confirmDelete(selectedProject)"
+              >
+                <span class="btn-icon">🗑️</span>
+                <span class="btn-text">{{ $t('history.deleteProject') }}</span>
+              </button>
+            </div>
+
+            <!-- 불가 회복 힌트 -->
             <div class="modal-playback-hint">
               <span class="hint-text">{{ $t('history.replayHint') }}</span>
             </div>
@@ -194,7 +212,7 @@
 import { ref, computed, onMounted, onUnmounted, onActivated, watch, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { getSimulationHistory } from '../api/simulation'
+import { getSimulationHistory, deleteSimulation } from '../api/simulation'
 
 const router = useRouter()
 const route = useRoute()
@@ -207,6 +225,7 @@ const isExpanded = ref(false)
 const hoveringCard = ref(null)
 const historyContainer = ref(null)
 const selectedProject = ref(null)  // 当前选中的项目（用于弹窗）
+const deletingId = ref(null)  // 삭제 중인 프로젝트 ID
 let observer = null
 let isAnimating = false  // 动画锁，防止闪烁
 let expandDebounceTimer = null  // 防抖定时器
@@ -433,6 +452,41 @@ const goToReport = () => {
       params: { reportId: selectedProject.value.report_id }
     })
     closeModal()
+  }
+}
+
+// 프로젝트 삭제 확인
+const confirmDelete = async (project, event) => {
+  if (event) event.stopPropagation()
+  
+  const title = getSimulationTitle(project.simulation_requirement)
+  const confirmed = window.confirm(
+    `정말로 이 프로젝트를 삭제하시겠습니까?\n\n"${title}"\n(${formatSimulationId(project.simulation_id)})\n\n⚠️ 이 작업은 되돌릴 수 없습니다!`
+  )
+  
+  if (!confirmed) return
+  
+  try {
+    deletingId.value = project.simulation_id
+    const res = await deleteSimulation(project.simulation_id)
+    
+    if (res.success) {
+      // 목록에서 제거
+      projects.value = projects.value.filter(
+        p => p.simulation_id !== project.simulation_id
+      )
+      // 모달 닫기
+      if (selectedProject.value?.simulation_id === project.simulation_id) {
+        closeModal()
+      }
+    } else {
+      alert(`삭제 실패: ${res.error || '알 수 없는 오류'}`)
+    }
+  } catch (error) {
+    console.error('프로젝트 삭제 실패:', error)
+    alert('프로젝트 삭제 중 오류가 발생했습니다.')
+  } finally {
+    deletingId.value = null
   }
 }
 
@@ -703,6 +757,42 @@ onUnmounted(() => {
   color: #6B7280;
   letter-spacing: 0.5px;
   font-weight: 500;
+}
+
+/* 카드 헤더 오른쪽 영역 */
+.card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 삭제 버튼 (카드) */
+.card-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: transparent;
+  color: #D1D5DB;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 0;
+  opacity: 0;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.project-card:hover .card-delete-btn {
+  opacity: 1;
+}
+
+.card-delete-btn:hover {
+  background: #FEE2E2;
+  color: #EF4444;
 }
 
 /* 功能状态图标组 */
@@ -1338,5 +1428,25 @@ onUnmounted(() => {
   letter-spacing: 0.3px;
   text-align: center;
   line-height: 1.5;
+}
+
+/* 모달 삭제 위험 영역 */
+.modal-danger-zone {
+  display: flex;
+  justify-content: center;
+  padding: 16px 32px 8px;
+  background: #FFFFFF;
+  border-top: 1px dashed #FCA5A5;
+}
+
+.btn-delete {
+  border: 1px solid #FCA5A5 !important;
+  background: #FFF5F5 !important;
+  color: #DC2626 !important;
+}
+
+.btn-delete:hover {
+  background: #FEE2E2 !important;
+  border-color: #EF4444 !important;
 }
 </style>

@@ -316,7 +316,8 @@
     "notStarted": "未开始",
     "roundsProgress": "{current}/{total} 轮",
     "untitledSimulation": "未命名模拟",
-    "unknownFile": "未知文件"
+    "unknownFile": "未知文件",
+    "deleteProject": "删除项目"
   },
   "api": {
     "projectNotFound": "项目不存在: {id}",

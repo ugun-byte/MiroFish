@@ -316,7 +316,8 @@
     "notStarted": "Not started",
     "roundsProgress": "{current}/{total} rounds",
     "untitledSimulation": "Untitled simulation",
-    "unknownFile": "Unknown file"
+    "unknownFile": "Unknown file",
+    "deleteProject": "Delete Project"
   },
   "api": {
     "projectNotFound": "Project not found: {id}",

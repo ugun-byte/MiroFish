@@ -58,7 +58,10 @@ export const requestWithRetry = async (requestFn, maxRetries = 3, delay = 1000) 
     try {
       return await requestFn()
     } catch (error) {
-      if (i === maxRetries - 1) throw error
+      // 타임아웃, 취소, 또는 마지막 시도일 경우 재시도하지 않고 에러를 던짐 (로컬 LLM 과부하 방지)
+      if (i === maxRetries - 1 || error.code === 'ECONNABORTED' || error.name === 'CanceledError') {
+        throw error
+      }
       
       console.warn(`Request failed, retrying (${i + 1}/${maxRetries})...`)
       await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)))

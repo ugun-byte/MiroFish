@@ -14,12 +14,17 @@ for (const path in localeFiles) {
   }
 }
 
-const savedLocale = localStorage.getItem('locale') || 'zh'
+let savedLocale = localStorage.getItem('locale') || 'ko'
 
+// 기존에 'zh'(중국어)로 저장된 사용자가 있다면 강제로 'ko'(한국어)로 초기화
+if (savedLocale === 'zh') {
+  savedLocale = 'ko'
+  localStorage.setItem('locale', 'ko')
+}
 const i18n = createI18n({
   legacy: false,
   locale: savedLocale,
-  fallbackLocale: 'zh',
+  fallbackLocale: 'ko',
   messages
 })
 

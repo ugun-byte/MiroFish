@@ -45,7 +45,9 @@ export const getReport = (reportId) => {
 /**
  * 与 Report Agent 对话
  * @param {Object} data - { simulation_id, message, chat_history? }
+ * @param {Object} config - Axios config options (e.g. signal for aborting)
  */
-export const chatWithReport = (data) => {
-  return requestWithRetry(() => service.post('/api/report/chat', data), 3, 1000)
+export const chatWithReport = (data, config = {}) => {
+  // 对话请求不需要重试，因为这会导致后端重复生成
+  return requestWithRetry(() => service.post('/api/report/chat', data, config), 1, 0)
 }
