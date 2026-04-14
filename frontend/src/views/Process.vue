@@ -178,15 +178,15 @@
           <div v-else-if="currentPhase < 1" class="graph-waiting">
             <div class="waiting-icon">
               <svg viewBox="0 0 100 100" class="network-icon">
-                <circle cx="50" cy="20" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
-                <circle cx="20" cy="60" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
-                <circle cx="80" cy="60" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
-                <circle cx="50" cy="80" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
-                <line x1="50" y1="28" x2="25" y2="54" stroke="#000" stroke-width="1"/>
-                <line x1="50" y1="28" x2="75" y2="54" stroke="#000" stroke-width="1"/>
-                <line x1="28" y1="60" x2="72" y2="60" stroke="#000" stroke-width="1" stroke-dasharray="4"/>
-                <line x1="50" y1="72" x2="26" y2="66" stroke="#000" stroke-width="1"/>
-                <line x1="50" y1="72" x2="74" y2="66" stroke="#000" stroke-width="1"/>
+                <circle cx="50" cy="20" r="8" fill="none" stroke="var(--text-main)" stroke-width="1.5"/>
+                <circle cx="20" cy="60" r="8" fill="none" stroke="var(--text-main)" stroke-width="1.5"/>
+                <circle cx="80" cy="60" r="8" fill="none" stroke="var(--text-main)" stroke-width="1.5"/>
+                <circle cx="50" cy="80" r="8" fill="none" stroke="var(--text-main)" stroke-width="1.5"/>
+                <line x1="50" y1="28" x2="25" y2="54" stroke="var(--text-main)" stroke-width="1"/>
+                <line x1="50" y1="28" x2="75" y2="54" stroke="var(--text-main)" stroke-width="1"/>
+                <line x1="28" y1="60" x2="72" y2="60" stroke="var(--text-main)" stroke-width="1" stroke-dasharray="4"/>
+                <line x1="50" y1="72" x2="26" y2="66" stroke="var(--text-main)" stroke-width="1"/>
+                <line x1="50" y1="72" x2="74" y2="66" stroke="var(--text-main)" stroke-width="1"/>
               </svg>
             </div>
             <p class="waiting-text">等待本体生成</p>
@@ -980,7 +980,7 @@ const renderGraph = () => {
   
   // 可见的细线
   const link = linkGroup.append('line')
-    .attr('stroke', '#ccc')
+    .attr('stroke', 'rgba(0, 242, 254, 0.3)')
     .attr('stroke-width', 1.5)
     .attr('stroke-opacity', 0.6)
   
@@ -1021,7 +1021,7 @@ const renderGraph = () => {
   node.append('circle')
     .attr('r', 10)
     .attr('fill', d => colorScale(d.type))
-    .attr('stroke', '#fff')
+    .attr('stroke', 'var(--bg-deep, #050814)')
     .attr('stroke-width', 2)
     .attr('class', 'node-circle')
   
@@ -1030,7 +1030,7 @@ const renderGraph = () => {
     .attr('dy', 4)
     .text(d => d.name?.substring(0, 12) || '')
     .attr('font-size', '11px')
-    .attr('fill', '#333')
+    .attr('fill', 'var(--text-main)')
     .attr('font-family', 'JetBrains Mono, monospace')
   
   // 点击空白处关闭详情面板
@@ -1093,12 +1093,12 @@ onUnmounted(() => {
 <style scoped>
 /* 变量 */
 :root {
-  --black: #000000;
-  --white: #FFFFFF;
+  --black: var(--text-main);
+  --white: transparent;
   --orange: #FF6B35;
-  --gray-light: #F5F5F5;
-  --gray-border: #E0E0E0;
-  --gray-text: #666666;
+  --gray-light: rgba(13, 17, 33, 0.6);
+  --gray-border: rgba(0, 242, 254, 0.15);
+  --gray-text: #94a3b8;
 }
 
 .process-page {
@@ -1115,8 +1115,8 @@ onUnmounted(() => {
   justify-content: space-between;
   padding: 0 24px;
   height: 56px;
-  background: #000;
-  color: #fff;
+  background: var(--bg-panel);
+  color: var(--text-main);
   z-index: 10;
   position: relative;
 }
@@ -1144,7 +1144,7 @@ onUnmounted(() => {
 
 .step-badge {
   background: #FF6B35;
-  color: #fff;
+  color: var(--text-main);
   padding: 2px 8px;
   font-size: 0.7rem;
   font-weight: 600;
@@ -1155,7 +1155,7 @@ onUnmounted(() => {
 .step-name {
   font-size: 0.85rem;
   letter-spacing: 0.05em;
-  color: #fff;
+  color: var(--text-main);
 }
 
 .nav-status {
@@ -1167,7 +1167,7 @@ onUnmounted(() => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #666;
+  background: var(--bg-panel);
   margin-right: 8px;
 }
 
@@ -1191,7 +1191,7 @@ onUnmounted(() => {
 
 .status-text {
   font-size: 0.75rem;
-  color: #999;
+  color: var(--text-muted);
 }
 
 /* 主内容区 */
@@ -1207,9 +1207,9 @@ onUnmounted(() => {
   flex: none; /* Fixed width initially */
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #E0E0E0;
+  border-right: 1px solid var(--bg-panel-border);
   transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #fff;
+  background: transparent;
   z-index: 5;
 }
 
@@ -1223,8 +1223,8 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 12px 24px;
-  border-bottom: 1px solid #E0E0E0;
-  background: #fff;
+  border-bottom: 1px solid var(--bg-panel-border);
+  background: transparent;
   height: 50px;
 }
 
@@ -1250,7 +1250,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 16px;
   font-size: 0.75rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .stat-item {
@@ -1261,7 +1261,7 @@ onUnmounted(() => {
 
 .stat-val {
   font-weight: 600;
-  color: #333;
+  color: var(--text-main);
 }
 
 .stat-divider {
@@ -1284,13 +1284,13 @@ onUnmounted(() => {
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.2s;
-  color: #666;
+  color: var(--text-muted);
   border-radius: 2px;
 }
 
 .action-btn:hover:not(:disabled) {
-  background: #F5F5F5;
-  color: #000;
+  background: rgba(0, 242, 254, 0.1);
+  color: var(--text-main);
 }
 
 .action-btn:disabled {
@@ -1345,7 +1345,7 @@ onUnmounted(() => {
 .loading-ring:nth-child(1) {
   width: 80px;
   height: 80px;
-  border-top-color: #000;
+  border-top-color: var(--text-main);
 }
 
 .loading-ring:nth-child(2) {
@@ -1362,7 +1362,7 @@ onUnmounted(() => {
   height: 40px;
   top: 20px;
   left: 20px;
-  border-bottom-color: #666;
+  border-bottom-color: var(--text-muted);
   animation-delay: 0.4s;
 }
 
@@ -1373,13 +1373,13 @@ onUnmounted(() => {
 .loading-text,
 .waiting-text {
   font-size: 0.9rem;
-  color: #333;
+  color: var(--text-main);
   margin: 0 0 8px;
 }
 
 .waiting-hint {
   font-size: 0.8rem;
-  color: #999;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -1414,7 +1414,7 @@ onUnmounted(() => {
   gap: 8px;
   padding: 8px 16px;
   background: rgba(255, 107, 53, 0.1);
-  border: 1px solid #FF6B35;
+  border: 1px solid var(--bg-panel-border);
   font-size: 0.8rem;
   color: #FF6B35;
 }
@@ -1434,8 +1434,8 @@ onUnmounted(() => {
   right: 16px;
   width: 320px;
   max-height: calc(100% - 32px);
-  background: #fff;
-  border: 1px solid #E0E0E0;
+  background: transparent;
+  border: 1px solid var(--bg-panel-border);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
@@ -1448,20 +1448,20 @@ onUnmounted(() => {
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: #FAFAFA;
-  border-bottom: 1px solid #E0E0E0;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--bg-panel-border);
 }
 
 .detail-title {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-main);
 }
 
 .detail-badge {
   padding: 2px 10px;
   font-size: 0.75rem;
-  color: #fff;
+  color: var(--text-main);
   border-radius: 2px;
 }
 
@@ -1475,13 +1475,13 @@ onUnmounted(() => {
   background: none;
   border: none;
   font-size: 1.2rem;
-  color: #999;
+  color: var(--text-muted);
   cursor: pointer;
   transition: color 0.2s;
 }
 
 .detail-close:hover {
-  color: #333;
+  color: var(--text-main);
 }
 
 .detail-content {
@@ -1498,21 +1498,21 @@ onUnmounted(() => {
 
 .detail-label {
   font-size: 0.8rem;
-  color: #999;
+  color: var(--text-muted);
   min-width: 70px;
   flex-shrink: 0;
 }
 
 .detail-value {
   font-size: 0.85rem;
-  color: #333;
+  color: var(--text-main);
   word-break: break-word;
 }
 
 .detail-value.uuid {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .detail-section {
@@ -1522,10 +1522,10 @@ onUnmounted(() => {
 .detail-summary {
   margin: 8px 0 0 0;
   font-size: 0.85rem;
-  color: #333;
+  color: var(--text-main);
   line-height: 1.6;
   padding: 10px;
-  background: #F9F9F9;
+  background: var(--bg-panel);
   border-left: 3px solid #FF6B35;
 }
 
@@ -1538,9 +1538,9 @@ onUnmounted(() => {
 .label-tag {
   padding: 2px 8px;
   font-size: 0.75rem;
-  background: #F0F0F0;
-  border: 1px solid #E0E0E0;
-  color: #666;
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-panel-border);
+  color: var(--text-muted);
 }
 
 /* 边详情关系展示 */
@@ -1551,48 +1551,48 @@ onUnmounted(() => {
   gap: 8px;
   margin-bottom: 16px;
   padding: 12px;
-  background: #F9F9F9;
-  border: 1px solid #E0E0E0;
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-panel-border);
 }
 
 .edge-source,
 .edge-target {
   font-size: 0.85rem;
   font-weight: 500;
-  color: #333;
+  color: var(--text-main);
 }
 
 .edge-arrow {
-  color: #999;
+  color: var(--text-muted);
 }
 
 .edge-type {
   padding: 2px 8px;
   font-size: 0.75rem;
   background: #FF6B35;
-  color: #fff;
+  color: var(--text-main);
 }
 
 .detail-value.highlight {
   font-weight: 600;
-  color: #000;
+  color: var(--text-main);
 }
 
 .detail-subtitle {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-main);
   margin: 16px 0 12px 0;
   padding-bottom: 8px;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid var(--bg-panel-border);
 }
 
 /* Properties 属性列表 */
 .properties-list {
   margin-top: 8px;
   padding: 10px;
-  background: #F9F9F9;
-  border: 1px solid #E0E0E0;
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-panel-border);
 }
 
 .property-item {
@@ -1606,13 +1606,13 @@ onUnmounted(() => {
 }
 
 .property-key {
-  color: #666;
+  color: var(--text-muted);
   margin-right: 8px;
   font-family: 'JetBrains Mono', monospace;
 }
 
 .property-value {
-  color: #333;
+  color: var(--text-main);
   word-break: break-word;
 }
 
@@ -1629,9 +1629,9 @@ onUnmounted(() => {
   padding: 6px 10px;
   font-size: 0.75rem;
   font-family: 'JetBrains Mono', monospace;
-  background: #F0F0F0;
-  border: 1px solid #E0E0E0;
-  color: #666;
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-panel-border);
+  color: var(--text-muted);
   word-break: break-all;
 }
 
@@ -1647,8 +1647,8 @@ onUnmounted(() => {
   flex-wrap: wrap;
   gap: 16px;
   padding: 12px 24px;
-  border-top: 1px solid #E0E0E0;
-  background: #FAFAFA;
+  border-top: 1px solid var(--bg-panel-border);
+  background: var(--bg-panel);
 }
 
 .legend-item {
@@ -1665,11 +1665,11 @@ onUnmounted(() => {
 }
 
 .legend-label {
-  color: #333;
+  color: var(--text-main);
 }
 
 .legend-count {
-  color: #999;
+  color: var(--text-muted);
 }
 
 /* 右侧面板 - 50% default */
@@ -1678,7 +1678,7 @@ onUnmounted(() => {
   flex: none;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: transparent;
   transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, transform 0.3s ease;
   overflow: hidden;
   opacity: 1;
@@ -1692,8 +1692,8 @@ onUnmounted(() => {
 }
 
 .right-panel .panel-header.dark-header {
-  background: #000;
-  color: #fff;
+  background: var(--bg-panel);
+  color: var(--text-main);
   border-bottom: none;
 }
 
@@ -1712,7 +1712,7 @@ onUnmounted(() => {
 /* 流程阶段 */
 .process-phase {
   margin-bottom: 24px;
-  border: 1px solid #E0E0E0;
+  border: 1px solid var(--bg-panel-border);
   opacity: 0.5;
   transition: all 0.3s;
 }
@@ -1735,16 +1735,16 @@ onUnmounted(() => {
   align-items: flex-start;
   gap: 16px;
   padding: 16px;
-  background: #FAFAFA;
-  border-bottom: 1px solid #E0E0E0;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--bg-panel-border);
 }
 
 .process-phase.active .phase-header {
-  background: #FFF5F2;
+  background: rgba(255, 107, 53, 0.1);
 }
 
 .process-phase.completed .phase-header {
-  background: #F2FAF6;
+  background: rgba(0, 255, 157, 0.05);
 }
 
 .phase-num {
@@ -1774,7 +1774,7 @@ onUnmounted(() => {
 
 .phase-api {
   font-size: 0.75rem;
-  color: #999;
+  color: var(--text-muted);
   font-family: 'JetBrains Mono', monospace;
 }
 
@@ -1782,17 +1782,17 @@ onUnmounted(() => {
   font-size: 0.75rem;
   padding: 4px 10px;
   background: #eee;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .phase-status.active {
   background: #FF6B35;
-  color: #fff;
+  color: var(--text-main);
 }
 
 .phase-status.completed {
   background: #1A936F;
-  color: #fff;
+  color: var(--text-main);
 }
 
 /* 阶段详情 */
@@ -1810,9 +1810,9 @@ onUnmounted(() => {
 .entity-tag {
   font-size: 0.75rem;
   padding: 4px 10px;
-  background: #F5F5F5;
-  border: 1px solid #E0E0E0;
-  color: #333;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--bg-panel-border);
+  color: var(--text-main);
 }
 
 /* 关系列表 */
@@ -1834,7 +1834,7 @@ onUnmounted(() => {
 
 .rel-source,
 .rel-target {
-  color: #333;
+  color: var(--text-main);
 }
 
 .rel-arrow {
@@ -1848,7 +1848,7 @@ onUnmounted(() => {
 
 .relation-more {
   padding-top: 8px;
-  color: #999;
+  color: var(--text-muted);
   font-size: 0.75rem;
 }
 
@@ -1858,8 +1858,8 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: #FFF5F2;
-  border: 1px solid #FFE0D6;
+  background: rgba(255, 107, 53, 0.1);
+  border: 1px solid var(--bg-panel-border);
 }
 
 .progress-spinner {
@@ -1873,26 +1873,26 @@ onUnmounted(() => {
 
 .progress-text {
   font-size: 0.85rem;
-  color: #333;
+  color: var(--text-main);
 }
 
 /* 等待状态 */
 .waiting-state {
   padding: 16px;
-  background: #F9F9F9;
+  background: var(--bg-panel);
   border: 1px dashed #E0E0E0;
   text-align: center;
 }
 
 .waiting-hint {
   font-size: 0.85rem;
-  color: #999;
+  color: var(--text-muted);
 }
 
 /* 进度条 */
 .progress-bar {
   height: 6px;
-  background: #E0E0E0;
+  background: var(--bg-panel);
   margin-bottom: 8px;
   overflow: hidden;
 }
@@ -1910,7 +1910,7 @@ onUnmounted(() => {
 }
 
 .progress-message {
-  color: #666;
+  color: var(--text-muted);
 }
 
 .progress-percent {
@@ -1928,20 +1928,20 @@ onUnmounted(() => {
   flex: 1;
   text-align: center;
   padding: 12px;
-  background: #F5F5F5;
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .result-value {
   display: block;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #000;
+  color: var(--text-main);
   margin-bottom: 4px;
 }
 
 .result-label {
   font-size: 0.7rem;
-  color: #999;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -1950,7 +1950,7 @@ onUnmounted(() => {
 .next-step-section {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid #E0E0E0;
+  border-top: 1px solid var(--bg-panel-border);
 }
 
 .next-step-btn {
@@ -1960,8 +1960,8 @@ onUnmounted(() => {
   justify-content: center;
   gap: 10px;
   padding: 16px;
-  background: #000;
-  color: #fff;
+  background: var(--bg-panel);
+  color: var(--text-main);
   border: none;
   font-size: 1rem;
   font-weight: 500;
@@ -1975,7 +1975,7 @@ onUnmounted(() => {
 }
 
 .next-step-btn:disabled {
-  background: #ccc;
+  background: var(--bg-panel);
   cursor: not-allowed;
 }
 
@@ -1985,8 +1985,8 @@ onUnmounted(() => {
 
 /* 项目信息面板 */
 .project-panel {
-  border-top: 1px solid #E0E0E0;
-  background: #FAFAFA;
+  border-top: 1px solid var(--bg-panel-border);
+  background: var(--bg-panel);
 }
 
 .project-header {
@@ -1994,7 +1994,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 10px;
   padding: 12px 24px;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid var(--bg-panel-border);
 }
 
 .project-icon {
@@ -2024,12 +2024,12 @@ onUnmounted(() => {
 }
 
 .item-label {
-  color: #999;
+  color: var(--text-muted);
   flex-shrink: 0;
 }
 
 .item-value {
-  color: #333;
+  color: var(--text-main);
   text-align: right;
   max-width: 60%;
   word-break: break-all;
@@ -2038,7 +2038,7 @@ onUnmounted(() => {
 .item-value.code {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 /* 响应式 */
@@ -2050,7 +2050,7 @@ onUnmounted(() => {
   .left-panel {
     width: 100% !important;
     border-right: none;
-    border-bottom: 1px solid #E0E0E0;
+    border-bottom: 1px solid var(--bg-panel-border);
     height: 50vh;
   }
   

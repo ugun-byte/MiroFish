@@ -152,6 +152,7 @@ npm run dev
 ```
 
 **서비스 주소:**
+
 - 프론트엔드: `http://localhost:3000`
 - 백엔드 API: `http://localhost:5001`
 
@@ -184,7 +185,7 @@ docker compose up -d
 
 &nbsp;
 
-MiroFish 팀에서는 정규직/인턴십 포지션을 상시 모집하고 있습니다. 멀티 에이전트 애플리케이션 및 LLM 시뮬레이션에 관심이 있으시다면 언제든지 이력서를 보내주세요: **mirofish@shanda.com**
+MiroFish 팀에서는 정규직/인턴십 포지션을 상시 모집하고 있습니다. 멀티 에이전트 애플리케이션 및 LLM 시뮬레이션에 관심이 있으시다면 언제든지 이력서를 보내주세요: **<mirofish@shanda.com>**
 
 ## 📄 감사의 말
 

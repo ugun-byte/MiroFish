@@ -660,8 +660,8 @@ onUnmounted(() => {
   right: 0;
   bottom: 0;
   background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 242, 254, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 242, 254, 0.08) 1px, transparent 1px);
   background-size: 50px 50px;
   /* 从左上角开始定位，高度变化时只在底部扩展，不影响已有网格位置 */
   background-position: top left;
@@ -674,8 +674,8 @@ onUnmounted(() => {
   right: 0;
   bottom: 0;
   background: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.9) 0%, transparent 15%, transparent 85%, rgba(255, 255, 255, 0.9) 100%),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, transparent 20%, transparent 80%, rgba(255, 255, 255, 0.8) 100%);
+    linear-gradient(to right, rgba(5, 8, 20, 0.9) 0%, transparent 15%, transparent 85%, rgba(5, 8, 20, 0.9) 100%),
+    linear-gradient(to bottom, rgba(5, 8, 20, 0.8) 0%, transparent 20%, transparent 80%, rgba(5, 8, 20, 0.8) 100%);
   pointer-events: none;
 }
 
@@ -695,14 +695,14 @@ onUnmounted(() => {
 .section-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #E5E7EB, transparent);
+  background: linear-gradient(90deg, transparent, var(--bg-panel-border), transparent);
   max-width: 300px;
 }
 
 .section-title {
   font-size: 0.8rem;
   font-weight: 500;
-  color: #9CA3AF;
+  color: var(--text-muted);
   letter-spacing: 3px;
   text-transform: uppercase;
 }
@@ -722,18 +722,19 @@ onUnmounted(() => {
 .project-card {
   position: absolute;
   width: 280px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 0;
+  background: var(--bg-panel);
+  border: 1px solid var(--bg-panel-border);
+  border-radius: 6px;
   padding: 14px;
   cursor: pointer;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
   transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 700ms cubic-bezier(0.23, 1, 0.32, 1), opacity 700ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .project-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.4);
+  box-shadow: var(--cyan-glow);
+  border-color: var(--cyan-primary);
   z-index: 1000 !important;
 }
 
@@ -748,13 +749,13 @@ onUnmounted(() => {
   align-items: center;
   margin-bottom: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--bg-panel-border);
   font-family: 'JetBrains Mono', 'SF Mono', monospace;
   font-size: 0.7rem;
 }
 
 .card-id {
-  color: #6B7280;
+  color: var(--text-muted);
   letter-spacing: 0.5px;
   font-weight: 500;
 }
@@ -775,7 +776,7 @@ onUnmounted(() => {
   height: 18px;
   border: none;
   background: transparent;
-  color: #D1D5DB;
+  color: var(--bg-panel-border);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -791,8 +792,8 @@ onUnmounted(() => {
 }
 
 .card-delete-btn:hover {
-  background: #FEE2E2;
-  color: #EF4444;
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--alert-red);
 }
 
 /* 功能状态图标组 */
@@ -818,7 +819,7 @@ onUnmounted(() => {
 .status-icon:nth-child(3).available { color: #10B981; } /* 分析报告 - 绿色 */
 
 .status-icon.unavailable {
-  color: #D1D5DB;
+  color: var(--bg-panel-border);
   opacity: 0.5;
 }
 
@@ -839,8 +840,8 @@ onUnmounted(() => {
 /* 进度状态颜色 */
 .card-progress.completed { color: #10B981; }    /* 已完成 - 绿色 */
 .card-progress.in-progress { color: #F59E0B; }  /* 进行中 - 橙色 */
-.card-progress.not-started { color: #9CA3AF; }  /* 未开始 - 灰色 */
-.card-status.pending { color: #9CA3AF; }
+.card-progress.not-started { color: var(--text-muted); }  /* 未开始 - 灰色 */
+.card-status.pending { color: var(--text-muted); }
 
 /* 文件列表区域 */
 .card-files-wrapper {
@@ -850,9 +851,9 @@ onUnmounted(() => {
   max-height: 110px;
   margin-bottom: 12px;
   padding: 8px 10px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
-  border: 1px solid #e8eaed;
+  border: 1px solid var(--bg-panel-border);
   overflow: hidden;
 }
 
@@ -870,7 +871,7 @@ onUnmounted(() => {
   padding: 3px 6px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.6rem;
-  color: #6B7280;
+  color: var(--text-muted);
   background: rgba(255, 255, 255, 0.5);
   border-radius: 3px;
   letter-spacing: 0.3px;
@@ -881,15 +882,16 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   padding: 4px 6px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 242, 254, 0.05);
+  border: 1px solid rgba(0, 242, 254, 0.1);
   border-radius: 3px;
   transition: all 0.2s ease;
 }
 
 .file-item:hover {
-  background: rgba(255, 255, 255, 1);
+  background: rgba(0, 242, 254, 0.15);
   transform: translateX(2px);
-  border-color: #e5e7eb;
+  border-color: var(--cyan-primary);
 }
 
 /* 简约文件标签样式 */
@@ -911,20 +913,20 @@ onUnmounted(() => {
 }
 
 /* 低饱和度配色方案 - Morandi色系 */
-.file-tag.pdf { background: #f2e6e6; color: #a65a5a; }
-.file-tag.doc { background: #e6eff5; color: #5a7ea6; }
-.file-tag.xls { background: #e6f2e8; color: #5aa668; }
-.file-tag.ppt { background: #f5efe6; color: #a6815a; }
-.file-tag.txt { background: #f0f0f0; color: #757575; }
-.file-tag.code { background: #eae6f2; color: #815aa6; }
-.file-tag.img { background: #e6f2f2; color: #5aa6a6; }
-.file-tag.zip { background: #f2f0e6; color: #a69b5a; }
-.file-tag.other { background: #f3f4f6; color: #6b7280; }
+.file-tag.pdf { background: rgba(166, 90, 90, 0.2); color: #e8a0a0; }
+.file-tag.doc { background: rgba(90, 126, 166, 0.2); color: #8ab4de; }
+.file-tag.xls { background: rgba(90, 166, 104, 0.2); color: #8ad6a0; }
+.file-tag.ppt { background: rgba(166, 129, 90, 0.2); color: #d6b88a; }
+.file-tag.txt { background: rgba(255, 255, 255, 0.08); color: #a0a0a0; }
+.file-tag.code { background: rgba(129, 90, 166, 0.2); color: #b88ad6; }
+.file-tag.img { background: rgba(90, 166, 166, 0.2); color: #8ad6d6; }
+.file-tag.zip { background: rgba(166, 155, 90, 0.2); color: #d6cb8a; }
+.file-tag.other { background: rgba(0, 0, 0, 0.4); color: var(--text-muted); }
 
 .file-name {
   font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
-  color: #4b5563;
+  color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -938,7 +940,7 @@ onUnmounted(() => {
   justify-content: center;
   gap: 8px;
   height: 48px;
-  color: #9CA3AF;
+  color: var(--text-muted);
 }
 
 .empty-file-icon {
@@ -954,8 +956,8 @@ onUnmounted(() => {
 
 /* 悬停时文件区域效果 */
 .project-card:hover .card-files-wrapper {
-  border-color: #d1d5db;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-color: var(--bg-panel-border);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 /* 角落装饰 */
@@ -976,7 +978,7 @@ onUnmounted(() => {
   font-family: 'Inter', -apple-system, sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-main);
   margin: 0 0 6px 0;
   line-height: 1.4;
   white-space: nowrap;
@@ -986,14 +988,15 @@ onUnmounted(() => {
 }
 
 .project-card:hover .card-title {
-  color: #2563EB;
+  color: var(--cyan-primary);
+  text-shadow: 0 0 5px rgba(0, 242, 254, 0.5);
 }
 
 /* 卡片描述 */
 .card-desc {
   font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
-  color: #6B7280;
+  color: var(--text-muted);
   margin: 0 0 16px 0;
   line-height: 1.5;
   height: 34px;
@@ -1010,10 +1013,10 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding-top: 12px;
-  border-top: 1px solid #F3F4F6;
+  border-top: 1px solid var(--bg-panel-border);
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.65rem;
-  color: #9CA3AF;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
@@ -1041,7 +1044,7 @@ onUnmounted(() => {
 /* 进度状态颜色 - 底部 */
 .card-footer .card-progress.completed { color: #10B981; }
 .card-footer .card-progress.in-progress { color: #F59E0B; }
-.card-footer .card-progress.not-started { color: #9CA3AF; }
+.card-footer .card-progress.not-started { color: var(--text-muted); }
 
 /* 底部装饰线 */
 .card-bottom-line {
@@ -1050,7 +1053,7 @@ onUnmounted(() => {
   left: 0;
   height: 2px;
   width: 0;
-  background-color: #000;
+  background-color: var(--bg-panel);
   transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   z-index: 20;
 }
@@ -1066,7 +1069,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 14px;
   padding: 48px;
-  color: #9CA3AF;
+  color: var(--text-muted);
 }
 
 .empty-icon {
@@ -1077,8 +1080,8 @@ onUnmounted(() => {
 .loading-spinner {
   width: 24px;
   height: 24px;
-  border: 2px solid #E5E7EB;
-  border-top-color: #6B7280;
+  border: 2px solid var(--bg-panel-border);
+  border-top-color: var(--text-muted);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -1119,14 +1122,16 @@ onUnmounted(() => {
 }
 
 .modal-content {
-  background: #FFFFFF;
+  background: var(--bg-panel);
   width: 560px;
   max-width: 90vw;
   max-height: 85vh;
   overflow-y: auto;
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--cyan-primary);
   border-radius: 8px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--cyan-glow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 /* 动画过渡 */
@@ -1164,8 +1169,8 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 20px 32px;
-  border-bottom: 1px solid #F3F4F6;
-  background: #FFFFFF;
+  border-bottom: 1px solid var(--bg-panel-border);
+  background: transparent;
 }
 
 .modal-title-section {
@@ -1178,8 +1183,9 @@ onUnmounted(() => {
   font-family: 'JetBrains Mono', monospace;
   font-size: 1rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--cyan-primary);
   letter-spacing: 0.5px;
+  text-shadow: 0 0 5px rgba(0, 242, 254, 0.3);
 }
 
 .modal-progress {
@@ -1191,17 +1197,17 @@ onUnmounted(() => {
   font-weight: 600;
   padding: 4px 8px;
   border-radius: 4px;
-  background: #F9FAFB;
+  background: rgba(0, 0, 0, 0.4);
 }
 
-.modal-progress.completed { color: #10B981; background: rgba(16, 185, 129, 0.1); }
+.modal-progress.completed { color: #10B981; background: rgba(0, 255, 157, 0.1); }
 .modal-progress.in-progress { color: #F59E0B; background: rgba(245, 158, 11, 0.1); }
-.modal-progress.not-started { color: #9CA3AF; background: #F3F4F6; }
+.modal-progress.not-started { color: var(--text-muted); background: rgba(0, 0, 0, 0.4); }
 
 .modal-create-time {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
-  color: #9CA3AF;
+  color: var(--text-muted);
   letter-spacing: 0.3px;
 }
 
@@ -1211,7 +1217,7 @@ onUnmounted(() => {
   border: none;
   background: transparent;
   font-size: 1.5rem;
-  color: #9CA3AF;
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1221,8 +1227,8 @@ onUnmounted(() => {
 }
 
 .modal-close:hover {
-  background: #F3F4F6;
-  color: #111827;
+  background: rgba(0, 242, 254, 0.1);
+  color: var(--text-main);
 }
 
 /* 弹窗内容 */
@@ -1241,7 +1247,7 @@ onUnmounted(() => {
 .modal-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
-  color: #6B7280;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 10px;
@@ -1250,11 +1256,11 @@ onUnmounted(() => {
 
 .modal-requirement {
   font-size: 0.95rem;
-  color: #374151;
+  color: var(--text-main);
   line-height: 1.6;
   padding: 16px;
-  background: #F9FAFB;
-  border: 1px solid #F3F4F6;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--bg-panel-border);
   border-radius: 8px;
 }
 
@@ -1273,17 +1279,17 @@ onUnmounted(() => {
 }
 
 .modal-files::-webkit-scrollbar-track {
-  background: #F3F4F6;
+  background: rgba(0, 0, 0, 0.4);
   border-radius: 2px;
 }
 
 .modal-files::-webkit-scrollbar-thumb {
-  background: #D1D5DB;
+  background: var(--bg-panel-border);
   border-radius: 2px;
 }
 
 .modal-files::-webkit-scrollbar-thumb:hover {
-  background: #9CA3AF;
+  background: var(--bg-panel);
 }
 
 .modal-file-item {
@@ -1291,20 +1297,20 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--bg-panel-border);
   border-radius: 6px;
   transition: all 0.2s ease;
 }
 
 .modal-file-item:hover {
-  border-color: #D1D5DB;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-color: var(--cyan-primary);
+  background: rgba(0, 242, 254, 0.05);
 }
 
 .modal-file-name {
   font-size: 0.85rem;
-  color: #4B5563;
+  color: var(--text-main);
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1313,10 +1319,10 @@ onUnmounted(() => {
 
 .modal-empty {
   font-size: 0.85rem;
-  color: #9CA3AF;
+  color: var(--text-muted);
   padding: 16px;
-  background: #F9FAFB;
-  border: 1px dashed #E5E7EB;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px dashed var(--bg-panel-border);
   border-radius: 6px;
   text-align: center;
 }
@@ -1327,19 +1333,19 @@ onUnmounted(() => {
   align-items: center;
   gap: 16px;
   padding: 10px 32px 0;
-  background: #FFFFFF;
+  background: transparent;
 }
 
 .divider-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #E5E7EB, transparent);
+  background: linear-gradient(90deg, transparent, var(--bg-panel-border), transparent);
 }
 
 .divider-text {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.7rem;
-  color: #9CA3AF;
+  color: var(--text-muted);
   letter-spacing: 2px;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1350,7 +1356,7 @@ onUnmounted(() => {
   display: flex;
   gap: 16px;
   padding: 20px 32px;
-  background: #FFFFFF;
+  background: transparent;
 }
 
 .modal-btn {
@@ -1360,9 +1366,9 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   padding: 16px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--bg-panel-border);
   border-radius: 8px;
-  background: #FFFFFF;
+  background: rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
@@ -1370,22 +1376,24 @@ onUnmounted(() => {
 }
 
 .modal-btn:hover:not(:disabled) {
-  border-color: #000000;
+  border-color: var(--cyan-primary);
+  background: rgba(0, 242, 254, 0.05);
+  box-shadow: var(--cyan-glow);
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .modal-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
-  background: #F9FAFB;
+  background: rgba(0, 0, 0, 0.5);
+  border-color: transparent;
 }
 
 .btn-step {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.6rem;
   font-weight: 500;
-  color: #9CA3AF;
+  color: var(--text-muted);
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
@@ -1401,15 +1409,16 @@ onUnmounted(() => {
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #4B5563;
+  color: var(--text-main);
 }
 
-.modal-btn.btn-project .btn-icon { color: #3B82F6; }
+.modal-btn.btn-project .btn-icon { color: var(--cyan-primary); }
 .modal-btn.btn-simulation .btn-icon { color: #F59E0B; }
 .modal-btn.btn-report .btn-icon { color: #10B981; }
 
-.modal-btn:hover:not(:disabled) .btn-text {
-  color: #111827;
+.modal-btn:hover:not(:disabled) .btn-text,
+.modal-btn:hover:not(:disabled) .btn-icon {
+  text-shadow: 0 0 5px rgba(255,255,255,0.3);
 }
 
 /* 不可回放提示 */
@@ -1418,13 +1427,13 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   padding: 0 32px 20px;
-  background: #FFFFFF;
+  background: transparent;
 }
 
 .hint-text {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.7rem;
-  color: #9CA3AF;
+  color: var(--text-muted);
   letter-spacing: 0.3px;
   text-align: center;
   line-height: 1.5;
@@ -1435,18 +1444,19 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   padding: 16px 32px 8px;
-  background: #FFFFFF;
+  background: transparent;
   border-top: 1px dashed #FCA5A5;
 }
 
 .btn-delete {
-  border: 1px solid #FCA5A5 !important;
-  background: #FFF5F5 !important;
-  color: #DC2626 !important;
+  border: 1px solid var(--alert-red) !important;
+  background: rgba(255, 42, 85, 0.1) !important;
+  color: var(--alert-red) !important;
 }
 
 .btn-delete:hover {
-  background: #FEE2E2 !important;
-  border-color: #EF4444 !important;
+  background: rgba(255, 42, 85, 0.2) !important;
+  border-color: #ff4d6d !important;
+  box-shadow: var(--alert-red-glow) !important;
 }
 </style>

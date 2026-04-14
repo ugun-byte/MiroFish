@@ -75,7 +75,13 @@
     "layoutGraph": "그래프",
     "layoutSplit": "분할 화면",
     "layoutWorkbench": "작업대",
-    "stepNames": ["그래프 구축", "환경 설정", "시뮬레이션 실행", "분석 보고서", "심층 상호작용"]
+    "stepNames": [
+      "그래프 구축",
+      "환경 설정",
+      "시뮬레이션 실행",
+      "분석 보고서",
+      "심층 상호작용"
+    ]
   },
   "step1": {
     "ontologyGeneration": "온톨로지 생성",
@@ -247,7 +253,9 @@
     "panelRelatedEdges": "결합관계의 간선 정보",
     "panelRelatedNodes": "결합관계의 연결체 정보",
     "world1": "World 1",
-    "world2": "World 2"
+    "world2": "World 2",
+    "selectionReason": "선택 이유",
+    "waitingToStart": "시작 대기중"
   },
   "step5": {
     "interactiveTools": "상호작용 콘솔 메뉴",
