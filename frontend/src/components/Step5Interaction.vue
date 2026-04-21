@@ -270,7 +270,7 @@
                   </span>
                   <span class="message-time">{{ formatTime(msg.timestamp) }}</span>
                 </div>
-                <div class="message-text" v-html="renderMarkdown(msg.content)"></div>
+                <div class="message-text" v-html="msg.htmlContent || renderMarkdown(msg.content)"></div>
               </div>
             </div>
             <div v-if="isSending" class="chat-message assistant">
@@ -412,7 +412,7 @@
                   </svg>
                   <span>{{ result.question }}</span>
                 </div>
-                <div class="result-answer" v-html="renderMarkdown(result.answer)"></div>
+                <div class="result-answer" v-html="result.htmlAnswer || renderMarkdown(result.answer)"></div>
               </div>
             </div>
           </div>
@@ -665,6 +665,7 @@ const sendMessage = async () => {
   chatHistory.value.push({
     role: 'user',
     content: message,
+    htmlContent: renderMarkdown(message),
     timestamp: new Date().toISOString()
   })
   
@@ -729,9 +730,11 @@ const sendToReportAgent = async (message) => {
   }, { signal: abortController.value.signal })
   
   if (res.success && res.data) {
+    const rawContent = res.data.response || res.data.answer || t('step5.noResponse')
     chatHistory.value.push({
       role: 'assistant',
-      content: res.data.response || res.data.answer || t('step5.noResponse'),
+      content: rawContent,
+      htmlContent: renderMarkdown(rawContent),
       timestamp: new Date().toISOString()
     })
     addLog(t('log.reportAgentReplied'))
@@ -793,6 +796,7 @@ const sendToAgent = async (message) => {
       chatHistory.value.push({
         role: 'assistant',
         content: responseContent,
+        htmlContent: renderMarkdown(responseContent),
         timestamp: new Date().toISOString()
       })
       addLog(t('log.agentReplied', { name: selectedAgent.value.username }))
@@ -886,7 +890,8 @@ const submitSurvey = async () => {
           agent_name: agent?.username || `Agent ${agentIdx}`,
           profession: agent?.profession,
           question: surveyQuestion.value.trim(),
-          answer: responseContent
+          answer: responseContent,
+          htmlAnswer: renderMarkdown(responseContent)
         })
       }
       

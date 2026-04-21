@@ -9,7 +9,9 @@ from typing import Optional, Dict, Any, List
 from openai import OpenAI
 
 from ..config import Config
+import logging
 
+logger = logging.getLogger(__name__)
 
 class LLMClient:
     """LLM客户端"""
@@ -51,8 +53,16 @@ class LLMClient:
         Returns:
             模型响应文本
         """
+        # OpenClaw proxy requires 'openclaw' or 'openclaw/{model}'
+        request_model = self.model
+        if "18789" in self.base_url and not request_model.startswith("openclaw"):
+            if request_model == "gpt-5-mini":
+                request_model = "openclaw/gpt-5-mini"
+            else:
+                request_model = "openclaw"
+
         kwargs = {
-            "model": self.model,
+            "model": request_model,
             "messages": messages,
             "temperature": temperature,
             "max_tokens": max_tokens,
@@ -61,11 +71,36 @@ class LLMClient:
         if response_format:
             kwargs["response_format"] = response_format
         
-        response = self.client.chat.completions.create(**kwargs)
-        content = response.choices[0].message.content
-        # 部分模型（如MiniMax M2.5）会在content中包含<think>思考内容，需要移除
-        content = re.sub(r'<think>[\s\S]*?</think>', '', content).strip()
-        return content
+        import time
+        max_retries = 3
+        retry_delay = 1.0
+
+        for attempt in range(max_retries):
+            try:
+                response = self.client.chat.completions.create(
+                    **kwargs,
+                    timeout=120.0 # 2분 타임아웃
+                )
+                content = response.choices[0].message.content
+                if not content or content.strip() == "":
+                     if attempt < max_retries - 1:
+                        logger.warning(f"LLM 응답이 비어있음 (시도 {attempt+1}/{max_retries}). 재시도 중...")
+                        time.sleep(retry_delay * (2 ** attempt))
+                        continue
+                     return "No response from OpenClaw."
+                
+                # 부분 모델（如MiniMax M2.5）会在content中包含<think>思考内容，需要移除
+                content = re.sub(r'<think>[\s\S]*?</think>', '', content).strip()
+                return content
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    logger.warning(f"LLM 호출 실패 (시도 {attempt+1}/{max_retries}): {str(e)}. 재시도 중...")
+                    time.sleep(retry_delay * (2 ** attempt))
+                else:
+                    logger.error(f"LLM 호출 최종 실패: {str(e)}")
+                    return f"Error: {str(e)}"
+        
+        return "No response from OpenClaw."
     
     def chat_json(
         self,

@@ -235,7 +235,7 @@ class SimulationManager:
         defined_entity_types: Optional[List[str]] = None,
         use_llm_for_profiles: bool = True,
         progress_callback: Optional[callable] = None,
-        parallel_profile_count: int = 3
+        parallel_profile_count: int = 1  # Завис 부장 긴급 처방: PC 뻗음 방지 (3 -> 1)
     ) -> SimulationState:
         """
         准备模拟环境（全程自动化）
@@ -302,6 +302,15 @@ class SimulationManager:
                 return state
             
             # ========== 阶段2: 生成Agent Profile ==========
+            
+            # 자비스 보호 루틴: 너무 많은 엔티티로 인한 PC 과부하 방지 (최대 20개까지만 컷)
+            MAX_ENTITIES = 20
+            if len(filtered.entities) > MAX_ENTITIES:
+                logger.warning(f"엔티티 개수 폭주 감지: {len(filtered.entities)}개. 시스템 안정을 위해 {MAX_ENTITIES}개로 제한!")
+                filtered.entities = filtered.entities[:MAX_ENTITIES]
+                filtered.filtered_count = len(filtered.entities)
+                state.entities_count = filtered.filtered_count
+
             total_entities = len(filtered.entities)
             
             if progress_callback:

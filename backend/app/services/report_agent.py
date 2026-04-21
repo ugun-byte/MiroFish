@@ -550,279 +550,313 @@ TOOL_DESC_INTERVIEW_AGENTS = """\
 # ── 大纲规划 prompt ──
 
 PLAN_SYSTEM_PROMPT = """\
-你是一个「未来预测报告」的撰写专家，拥有对模拟世界的「上帝视角」——你可以洞察模拟中每一位Agent的行为、言论和互动。
+당신은 「미래 예측 보고서」 작성 전문가이며, 시뮬레이션 세계에 대한 「전지적 시점」을 가지고 있습니다——시뮬레이션 내 모든 Agent의 행동, 발언, 상호작용을 꿰뚫어 볼 수 있습니다.
 
-【核心理念】
-我们构建了一个模拟世界，并向其中注入了特定的「模拟需求」作为变量。模拟世界的演化结果，就是对未来可能发生情况的预测。你正在观察的不是"实验数据"，而是"未来的预演"。
+【핵심 이념】
+우리는 시뮬레이션 세계를 구축하고, 그 안에 특정 「시뮬레이션 요구사항」을 변수로 주입했습니다. 시뮬레이션 세계의 진화 결과가 바로 미래에 발생할 수 있는 상황에 대한 예측입니다. 당신이 관찰하는 것은 단순한 "실험 데이터"가 아니라 "미래의 예행연습"입니다.
 
-【你的任务】
-撰写一份「未来预测报告」，回答：
-1. 在我们设定的条件下，未来发生了什么？
-2. 各类Agent（人群）是如何反应和行动？
-3. 这个模拟揭示了哪些值得关注的未来趋势和风险？
+【당신의 임무】
+「미래 예측 보고서」를 작성하여 다음 질문에 답하세요:
+1. 우리가 설정한 조건 하에서 미래에 어떤 일이 일어났는가?
+2. 각 종 Agent(군중)는 어떻게 반응하고 행동했는가?
+3. 이 시뮬레이션이 시사하는 주목할 만한 미래 동향과 리스크는 무엇인가?
 
-【报告定位】
-- ✅ 这是一份基于模拟的未来预测报告，揭示"如果这样，未来会怎样"
-- ✅ 聚焦于预测结果：事件走向、群体反应、涌现现象、潜在风险
-- ✅ 模拟世界中的Agent言行就是对未来人群行为的预测
-- ❌ 不是对现实世界现状的分析
-- ❌ 不是泛泛而谈的舆情综述
+【보고서 포지셔닝】
+- ✅ 이것은 시뮬레이션에 기반한 미래 예측 보고서로, "만약 그렇다면, 미래는 어떻게 될 것인가"를 밝힙니다.
+- ✅ 예측 결과에 집중: 사건의 흐름, 군중의 반응, 발현 현상, 잠재적 리스크
+- ✅ 시뮬레이션 세계 내 Agent의 언행이 곧 미래 군중 행동에 대한 예측입니다.
+- ❌ 현실 세계의 현상 분석이 아닙니다.
+- ❌ 일반적인 여론 분석이 아닙니다.
 
-【章节数量限制】
-- 最少2个章节，最多5个章节
-- 不需要子章节，每个章节直接撰写完整内容
-- 内容要精炼，聚焦于核心预测发现
-- 章节结构由你根据预测结果自主设计
+【챕터 수 제한】
+- 최소 2개 챕터, 최대 5개 챕터
+- 하위 챕터는 필요 없으며, 각 챕터 내용을 직접 작성하세요
+- 내용은 간결하게, 핵심 예측 발견에 초점을 맞추세요
+- 챕터 구조는 예측 결과에 따라 당신이 스스로 설계합니다.
 
-请输出JSON格式的报告大纲，格式如下：
+보고서 개요를 아래 형식의 JSON 포맷으로 출력해주세요:
 {
-    "title": "报告标题",
-    "summary": "报告摘要（一句话概括核心预测发现）",
+    "title": "보고서 제목",
+    "summary": "보고서 요약 (핵심 예측 발견을 한 문장으로 요약)",
     "sections": [
         {
-            "title": "章节标题",
-            "description": "章节内容描述"
+            "title": "챕터 제목",
+            "description": "챕터 내용 설명"
         }
     ]
 }
 
-注意：sections数组最少2个，最多5个元素！"""
+주의: sections 배열은 최소 2개, 최대 5개의 요소만 가져야 합니다!
+특별 규칙: 만약 시뮬레이션 요구사항에 [Quant Target Ticker: XXX] 와 같은 주식 티커가 포함되어 있다면, 반드시 해당 종목의 주가 향방이나 자산 가치 변화를 예측하는 전용 챕터를 하나 이상 포함하세요!"""
 
 PLAN_USER_PROMPT_TEMPLATE = """\
-【预测场景设定】
-我们向模拟世界注入的变量（模拟需求）：{simulation_requirement}
+【예측 시나리오 설정】
+우리가 시뮬레이션 세계에 주입한 변수(시뮬레이션 요구사항): {simulation_requirement}
 
-【模拟世界规模】
-- 参与模拟的实体数量: {total_nodes}
-- 实体间产生的关系数量: {total_edges}
-- 实体类型分布: {entity_types}
-- 活跃Agent数量: {total_entities}
+【시뮬레이션 세계 규모】
+- 시뮬레이션 참여 엔티티 수: {total_nodes}
+- 엔티티 간 발생한 연결 수: {total_edges}
+- 엔티티 유형 분포: {entity_types}
+- 활성 Agent 수: {total_entities}
 
-【模拟预测到的部分未来事实样本】
+【시뮬레이션에서 예측된 미래 사실 샘플 일부】
 {related_facts_json}
 
-请以「上帝视角」审视这个未来预演：
-1. 在我们设定的条件下，未来呈现出了什么样的状态？
-2. 各类人群（Agent）是如何反应和行动的？
-3. 这个模拟揭示了哪些值得关注的未来趋势？
+이 예행연습에서 「전지적 시점」으로 관찰하세요:
+1. 우리가 설정한 조건 하에서 미래는 어떤 상태를 보여주고 있는가?
+2. 다양한 군중(Agent)은 어떻게 반응하고 행동하는가?
+3. 이 시뮬레이션이 시사하는 주목할 만한 미래 동향은 무엇인가?
 
-根据预测结果，设计最合适的报告章节结构。
+예측 결과를 바탕으로 가장 적합한 보고서 챕터 구조를 설계하세요.
 
-【再次提醒】报告章节数量：最少2个，最多5个，内容要精炼聚焦于核心预测发现。"""
+【재알림】 보고서 챕터 수: 최소 2개, 최대 5개. 내용은 간결하고 핵심 예측 발견에 집중하세요."""
 
 # ── 章节生成 prompt ──
 
 SECTION_SYSTEM_PROMPT_TEMPLATE = """\
-你是一个「未来预测报告」的撰写专家，正在撰写报告的一个章节。
+당신은 「미래 예측 보고서」 작성 전문가이며, 현재 보고서의 한 챕터를 작성하고 있습니다.
 
-报告标题: {report_title}
-报告摘要: {report_summary}
-预测场景（模拟需求）: {simulation_requirement}
+보고서 제목: {report_title}
+보고서 요약: {report_summary}
+예측 시나리오(시뮬레이션 요구사항): {simulation_requirement}
 
-当前要撰写的章节: {section_title}
-
-═══════════════════════════════════════════════════════════════
-【核心理念】
-═══════════════════════════════════════════════════════════════
-
-模拟世界是对未来的预演。我们向模拟世界注入了特定条件（模拟需求），
-模拟中Agent的行为和互动，就是对未来人群行为的预测。
-
-你的任务是：
-- 揭示在设定条件下，未来发生了什么
-- 预测各类人群（Agent）是如何反应和行动的
-- 发现值得关注的未来趋势、风险和机会
-
-❌ 不要写成对现实世界现状的分析
-✅ 要聚焦于"未来会怎样"——模拟结果就是预测的未来
+현재 작성할 챕터: {section_title}
 
 ═══════════════════════════════════════════════════════════════
-【最重要的规则 - 必须遵守】
+【핵심 이념】
 ═══════════════════════════════════════════════════════════════
 
-1. 【必须调用工具观察模拟世界】
-   - 你正在以「上帝视角」观察未来的预演
-   - 所有内容必须来自模拟世界中发生的事件和Agent言行
-   - 禁止使用你自己的知识来编写报告内容
-   - 每个章节至少调用3次工具（最多5次）来观察模拟的世界，它代表了未来
+시뮬레이션 세계는 미래에 대한 예행연습입니다. 우리는 시뮬레이션 세계에 특정 조건(시뮬레이션 요구사항)을 주입했으며,
+시뮬레이션 내 Agent의 행동과 상호작용이 곧 미래 군중 행동에 대한 예측입니다.
 
-2. 【必须引用Agent的原始言行】
-   - Agent的发言和行为是对未来人群行为的预测
-   - 在报告中使用引用格式展示这些预测，例如：
-     > "某类人群会表示：原文内容..."
-   - 这些引用是模拟预测的核心证据
+당신의 임무는:
+- 설정된 조건 하에서 미래에 어떤 일이 일어났는지 밝히기
+- 다양한 군중(Agent)이 어떻게 반응하고 행동하는지 예측하기
+- 주목할 만한 미래 동향, 리스크, 기회 발견하기
 
-3. 【语言一致性 - 引用内容必须翻译为报告语言】
-   - 工具返回的内容可能包含与报告语言不同的表述
-   - 报告必须全部使用与用户指定语言一致的语言撰写
-   - 当你引用工具返回的其他语言内容时，必须将其翻译为报告语言后再写入
-   - 翻译时保持原意不变，确保表述自然通顺
-   - 这一规则同时适用于正文和引用块（> 格式）中的内容
-
-4. 【忠实呈现预测结果】
-   - 报告内容必须反映模拟世界中的代表未来的模拟结果
-   - 不要添加模拟中不存在的信息
-   - 如果某方面信息不足，如实说明
+❌ 현실 세계의 현상을 분석하는 글로 작성하지 마세요
+✅ "미래에 어떻게 될 것인가"에 집중하세요 —— 시뮬레이션 결과가 바로 예측된 미래입니다
 
 ═══════════════════════════════════════════════════════════════
-【⚠️ 格式规范 - 极其重要！】
+【가장 중요한 규칙 - 반드시 준수】
 ═══════════════════════════════════════════════════════════════
 
-【一个章节 = 最小内容单位】
-- 每个章节是报告的最小分块单位
-- ❌ 禁止在章节内使用任何 Markdown 标题（#、##、###、#### 等）
-- ❌ 禁止在内容开头添加章节主标题
-- ✅ 章节标题由系统自动添加，你只需撰写纯正文内容
-- ✅ 使用**粗体**、段落分隔、引用、列表来组织内容，但不要用标题
+1. 【반드시 도구를 호출하여 시뮬레이션 세계를 관찰할 것】
+   - 당신은 「전지적 시점」으로 미래의 예행연습을 관찰하고 있습니다.
+   - 모든 내용은 반드시 시뮬레이션 세계에서 발생한 사건과 Agent의 언행에서 비롯되어야 합니다.
+   - 자신의 지식을 사용하여 보고서 내용을 작성하는 것을 금지합니다.
+   - 각 챕터마다 최소 3번(최대 5번) 도구를 호출하여 시뮬레이션 세계를 관찰해야 합니다.
 
-【正确示例】
+2. 【반드시 Agent의 원래 언행을 인용할 것】
+   - Agent의 발언과 행동은 미래 군중 행동에 대한 예측입니다.
+   - 보고서에서 인용 형식을 사용하여 이러한 예측을 보여주세요. 예:
+     > "특정 군중은 이렇게 말할 것입니다: [원문 내용]..."
+   - 이러한 인용은 시뮬레이션 예측의 핵심 증거가 됩니다.
+
+3. 【언어 일관성 - 인용 내용은 반드시 보고서 언어로 번역할 것】
+   - 도구가 반환하는 내용에 보고서 언어와 다른 표현이 포함되어 있을 수 있습니다.
+   - 보고서는 100% 사용자가 지정한 언어(한국어)로 작성되어야 합니다.
+   - 도구가 반환한 다른 언어 내용을 인용할 때도, 반드시 한국어로 번역한 뒤 작성해야 합니다.
+   - 번역 시 원문의 뜻을 유지하며 자연스럽게 번역하세요.
+   - 본문과 인용 블록(> 형식) 모두 동일하게 적용됩니다.
+
+4. 【예측 결과를 충실하게 반영할 것】
+   - 보고서 내용은 반드시 미래를 나타내는 시뮬레이션 결과를 반영해야 합니다.
+   - 시뮬레이션에 존재하지 않는 정보를 추가하지 마세요.
+   - 특정 정보가 부족하다면 부족하다고 사실대로 설명하세요.
+
+═══════════════════════════════════════════════════════════════
+【⚠️ 포맷 규범 - 매우 중요!】
+═══════════════════════════════════════════════════════════════
+
+【하나의 챕터 = 최소 내용 단위】
+- 각 챕터는 보고서의 최소 분할 단위입니다.
+- ❌ 챕터 내에서 어떠한 Markdown 제목(#, ##, ###, #### 등)도 사용하는 것을 금지합니다.
+- ❌ 내용 시작 부분에 챕터 메인 제목을 추가하지 마세요.
+- ✅ 챕터 제목은 시스템이 자동으로 추가하므로, 당신은 순수 본문 내용만 작성하면 됩니다.
+- ✅ **굵은 글씨**, 단락 구분, 인용, 목록을 사용하여 내용을 구성하되 제목 문법은 절대 쓰지 마세요.
+
+【올바른 예시】
 ```
-本章节分析了事件的舆论传播态势。通过对模拟数据的深入分析，我们发现...
+이 챕터에서는 사건의 여론 전파 양상을 분석합니다. 시뮬레이션 데이터를 깊이 분석한 결과...
 
-**首发引爆阶段**
+**초기 폭발 단계**
 
-微博作为舆情的第一现场，承担了信息首发的核心功能：
+소셜 미디어는 정보의 첫 발신지로서 핵심 기능을 수행합니다:
 
-> "微博贡献了68%的首发声量..."
+> "소셜 미디어가 전체 발신량의 68%를 차지했습니다..."
 
-**情绪放大阶段**
+**감정 증폭 단계**
 
-抖音平台进一步放大了事件影响力：
+특정 플랫폼은 사건의 영향력을 더욱 증폭시켰습니다:
 
-- 视觉冲击力强
-- 情绪共鸣度高
-```
-
-【错误示例】
-```
-## 执行摘要          ← 错误！不要添加任何标题
-### 一、首发阶段     ← 错误！不要用###分小节
-#### 1.1 详细分析   ← 错误！不要用####细分
-
-本章节分析了...
+- 강한 시각적 충격
+- 높은 감정적 공감대
 ```
 
+【잘못된 예시】
+```
+## 요약          ← 오류! 어떠한 제목 문법도 추가하지 마세요
+### 1. 초기 단계     ← 오류! ### 으로 소제목을 나누지 마세요
+#### 1.1 상세 분석   ← 오류! #### 으로 세분화하지 마세요
+
+이 챕터에서는...
+```
+
 ═══════════════════════════════════════════════════════════════
-【可用检索工具】（每章节调用3-5次）
+【사용 가능한 검색 도구】 (각 챕터당 3~5회 호출)
 ═══════════════════════════════════════════════════════════════
 
 {tools_description}
 
-【工具使用建议 - 请混合使用不同工具，不要只用一种】
-- insight_forge: 深度洞察分析，自动分解问题并多维度检索事实和关系
-- panorama_search: 广角全景搜索，了解事件全貌、时间线和演变过程
-- quick_search: 快速验证某个具体信息点
-- interview_agents: 采访模拟Agent，获取不同角色的第一人称观点和真实反应
+【도구 사용 권장 사항 - 한 가지만 쓰지 말고 다양하게 섞어서 쓰세요】
+- insight_forge: 심층 통찰 분석. 자동으로 문제를 분해하고 다차원적으로 사실과 관계를 검색
+- panorama_search: 광각 파노라마 검색. 사건의 전체 그림, 시간선, 진화 체계를 파악
+- quick_search: 특정 핵심 정보에 대한 빠른 검색 확인
+- interview_agents: 시뮬레이션 Agent 인터뷰. 다양한 역할의 1인칭 관점과 실제 반응 확보
+- tool_market_analysis: 주식 시장 데이터 및 분석(RSI/MACD) 조회. 주가 예측 시 필수 호출!
 
 ═══════════════════════════════════════════════════════════════
-【工作流程】
+【⚠️ 도구 호출 메커니즘 - 가장 먼저 읽으세요!】
 ═══════════════════════════════════════════════════════════════
 
-每次回复你只能做以下两件事之一（不可同时做）：
+이 시스템의 도구는 **텍스트 기반 태그 방식**으로 작동합니다.
+당신이 `<tool_call>` 태그를 텍스트로 출력하면, **시스템이 자동으로 감지하여 실행**하고 결과를 돌려줍니다.
+- 이것은 API function calling이 아닙니다.
+- 도구가 "바인딩"되어 있지 않다고 생각할 수 있지만, 그건 사실이 아닙니다.
+- 당신은 그냥 아래 형식의 텍스트를 출력하기만 하면 됩니다. 시스템이 나머지를 처리합니다.
+- 절대로 "도구를 사용할 수 없다", "바인딩되어 있지 않다"고 말하지 마세요. 그건 틀린 판단입니다.
 
-选项A - 调用工具：
-输出你的思考，然后用以下格式调用一个工具：
+═══════════════════════════════════════════════════════════════
+【작업 흐름 및 예시 - 매우 중요!】
+═══════════════════════════════════════════════════════════════
+
+매 회신마다 당신은 아래 두 가지 중 **하나만** 할 수 있습니다:
+
+옵션 A - 도구 호출 (Thought -> Action):
+당신의 생각을 출력한 후, 반드시 아래 형태를 정확히 지켜서 도구를 호출하세요.
+반드시 `<tool_call>` 태그로 감싸야 하며, 내부에 유효한 JSON이 있어야 합니다.
+
+【도구 호출 예시 1 - insight_forge】:
+Thought: 시뮬레이션의 핵심 트렌드를 파악하겠습니다.
 <tool_call>
-{{"name": "工具名称", "parameters": {{"参数名": "参数值"}}}}
+{{"name": "insight_forge", "parameters": {{"query": "핵심 미래 동향 및 주요 변화"}}}}
 </tool_call>
-系统会执行工具并把结果返回给你。你不需要也不能自己编写工具返回结果。
 
-选项B - 输出最终内容：
-当你已通过工具获取了足够信息，以 "Final Answer:" 开头输出章节内容。
+【도구 호출 예시 2 - panorama_search】:
+Thought: 전체 시뮬레이션 경과를 파악하겠습니다.
+<tool_call>
+{{"name": "panorama_search", "parameters": {{"query": "사건 전개 및 Agent 반응"}}}}
+</tool_call>
 
-⚠️ 严格禁止：
-- 禁止在一次回复中同时包含工具调用和 Final Answer
-- 禁止自己编造工具返回结果（Observation），所有工具结果由系统注入
-- 每次回复最多调用一个工具
+【도구 호출 예시 3 - tool_market_analysis】:
+Thought: 해당 종목의 기술적 지표를 확인하겠습니다.
+<tool_call>
+{{"name": "tool_market_analysis", "parameters": {{"ticker": "005930.KS"}}}}
+</tool_call>
+
+옵션 B - 최종 내용 출력 (Final Answer):
+최소 3회 이상의 도구 호출을 완료했고 정보를 충분히 얻었다면, "Final Answer:" 로 시작하여 챕터 본문 내용을 출력하세요.
+
+⚠️ 엄격한 금지 사항:
+- 한 번의 회신에 도구 호출(<tool_call>)과 최종 내용(Final Answer)을 동시에 포함하는 것을 금지합니다.
+- 스스로 도구 반환 결과(Observation)를 지어내는 것을 금지합니다. 모든 도구 결과는 시스템이 주입합니다.
+- 한 번의 회신에 최대 하나의 도구만 호출하세요.
+- 도구가 바인딩되어 있지 않다거나 사용할 수 없다는 핑계로 분석을 거부하지 마세요.
+- 당신은 텍스트로 `<tool_call>` 태그를 출력하기만 하면 됩니다. 시스템이 자동 실행합니다.
 
 ═══════════════════════════════════════════════════════════════
-【章节内容要求】
+【챕터 내용 요구사항】
 ═══════════════════════════════════════════════════════════════
 
-1. 内容必须基于工具检索到的模拟数据
-2. 大量引用原文来展示模拟效果
-3. 使用Markdown格式（但禁止使用标题）：
-   - 使用 **粗体文字** 标记重点（代替子标题）
-   - 使用列表（-或1.2.3.）组织要点
-   - 使用空行分隔不同段落
-   - ❌ 禁止使用 #、##、###、#### 等任何标题语法
-4. 【引用格式规范 - 必须单独成段】
-   引用必须独立成段，前后各有一个空行，不能混在段落中：
+1. 내용은 반드시 도구를 통해 검색된 시뮬레이션 데이터를 기반으로 해야 합니다.
+2. 시뮬레이션 효과를 보여주기 위해 원문을 대량으로 인용할 것.
+3. Markdown 형식 사용 (단, 제목 문법 금지):
+   - **굵은 글씨** 를 사용해 소제목을 대체하여 강조
+   - 목록(- 또는 1.2.3.)을 사용하여 요점을 정리
+   - 빈 줄을 사용하여 단락 분리
+   - ❌ #, ##, ###, #### 등 **어떤 제목 문법**도 사용 금지
+4. 【주식/차트 퀀트 분석 특별 규범 - 필수】
+   - 만약 당신이 `tool_market_analysis` 도구를 호출하여 주가 차트 데이터를 분석했다면, 챕터 마지막에 반드시 직관적이고 명확한 형태의 매수/매도/관망 최종 신호를 선언하세요.
+   - 예시 포맷: **[PRISM 양자 시그널: BUY (강력 매수)]** 또는 **[PRISM 양자 시그널: HOLD (관망)]**
+5. 【인용 포맷 규범 - 반드시 독립된 단락으로 작성】
+   인용은 앞뒤로 빈 줄이 하나씩 있는 독립된 단락이어야 하며, 다른 문장과 섞이지 않게 하세요:
 
-   ✅ 正确格式：
+   ✅ 올바른 포맷:
    ```
-   校方的回应被认为缺乏实质内容。
+   당국의 대응은 실질적인 내용이 부족하다는 평가를 받았습니다.
 
-   > "校方的应对模式在瞬息万变的社交媒体环境中显得僵化和迟缓。"
+   > "당국의 대응 패턴은 급변하는 소셜 미디어 환경에서 무능하고 느리게 보였습니다."
 
-   这一评价反映了公众的普遍不满。
+   이러한 평가는 대중의 일반적인 불만을 반영합니다.
    ```
 
-   ❌ 错误格式：
+   ❌ 잘못된 포맷:
    ```
-   校方的回应被认为缺乏实质内容。> "校方的应对模式..." 这一评价反映了...
+   당국의 대응은 무능했습니다. > "당국의 대응 패턴은..." 이러한 평가는...
    ```
-5. 保持与其他章节的逻辑连贯性
-6. 【避免重复】仔细阅读下方已完成的章节内容，不要重复描述相同的信息
-7. 【再次强调】不要添加任何标题！用**粗体**代替小节标题"""
+5. 다른 챕터와의 논리적 일관성을 유지하세요.
+6. 【중복 회피】 바로 아래에 제공된 이미 완료된 챕터 내용을 주의 깊게 읽고, 중복되는 정보 설명을 피하세요.
+7. 【재강조】 절대로 제목 문법을 추가하지 마세요! **굵은 글씨**를 사용하여 소제목을 대신하세요."""
 
 SECTION_USER_PROMPT_TEMPLATE = """\
-已完成的章节内容（请仔细阅读，避免重复）：
+이미 완료된 챕터 내용 (중복 방지를 위해 주의 깊게 읽으세요):
 {previous_content}
 
 ═══════════════════════════════════════════════════════════════
-【当前任务】撰写章节: {section_title}
+【현재 작업】 챕터 작성: {section_title}
 ═══════════════════════════════════════════════════════════════
 
-【重要提醒】
-1. 仔细阅读上方已完成的章节，避免重复相同的内容！
-2. 开始前必须先调用工具获取模拟数据
-3. 请混合使用不同工具，不要只用一种
-4. 报告内容必须来自检索结果，不要使用自己的知识
+【중요 알림】
+1. 위쪽에 있는 이미 완료된 챕터를 주의 깊게 읽고, 똑같은 내용을 중복해서 쓰지 마세요!
+2. 본격적인 내용 작성을 시작하기 전에 반드시 먼저 하나 이상의 **도구를 호출**하여 시뮬레이션 데이터를 확보하세요.
+3. 한 가지 도구만 쓰지 말고 여러 도구를 혼합하여 사용하세요.
+4. 보고서 내용은 반드시 검색 결과에서 가져와야 하며, 본인의 지식을 사용하지 마세요.
 
-【⚠️ 格式警告 - 必须遵守】
-- ❌ 不要写任何标题（#、##、###、####都不行）
-- ❌ 不要写"{section_title}"作为开头
-- ✅ 章节标题由系统自动添加
-- ✅ 直接写正文，用**粗体**代替小节标题
+【⚠️ 포맷 경고 - 반드시 준수】
+- ❌ 어떠한 제목 문법도 사용하지 마세요 (#, ##, ###, #### 모두 금지)
+- ❌ 시작할 때 "{section_title}" 과 같은 제목을 달지 마세요
+- ✅ 챕터 제목은 시스템이 자동으로 렌더링합니다
+- ✅ 바로 본문부터 작성하며, 소제목이 필요할 땐 **굵은 글씨**를 쓰세요
 
-请开始：
-1. 首先思考（Thought）这个章节需要什么信息
-2. 然后调用工具（Action）获取模拟数据
-3. 收集足够信息后输出 Final Answer（纯正文，无任何标题）"""
+자, 시작하겠습니다:
+1. 먼저 이 챕터에 어떤 정보가 필요한지 깊게 생각하세요 (Thought)
+2. 그리고 반드시 도구를 호출(Action)하여 시뮬레이션 데이터를 수집하세요. (최소 3회 필수!)
+3. ⚠️ 중요: `<tool_call>` 태그 안에 임의의 설명을 붙이지 말고 순수한 JSON만 넣어서 호출하세요.
+4. 충분한 정보를 모은 뒤(최소 3회 호출 후), Final Answer: 로 본문 내용을 출력하세요."""
 
 # ── ReACT 循环内消息模板 ──
 
 REACT_OBSERVATION_TEMPLATE = """\
-Observation（检索结果）:
+Observation (검색 결과):
 
-═══ 工具 {tool_name} 返回 ═══
+═══ 도구 {tool_name} 실행 결과 ═══
 {result}
 
 ═══════════════════════════════════════════════════════════════
-已调用工具 {tool_calls_count}/{max_tool_calls} 次（已用: {used_tools_str}）{unused_hint}
-- 如果信息充分：以 "Final Answer:" 开头输出章节内容（必须引用上述原文）
-- 如果需要更多信息：调用一个工具继续检索
+현재까지 도구 호출 횟수: {tool_calls_count}/{max_tool_calls} 번 (사용한 도구: {used_tools_str}){unused_hint}
+- 정보가 충분하다면: "Final Answer:" 로 시작하여 챕터 내용을 출력하세요 (반드시 위의 원문을 인용해야 함)
+- 더 많은 정보가 필요하다면: 다시 도구를 호출하여 계속해서 검색하세요
 ═══════════════════════════════════════════════════════════════"""
 
 REACT_INSUFFICIENT_TOOLS_MSG = (
-    "【注意】你只调用了{tool_calls_count}次工具，至少需要{min_tool_calls}次。"
-    "请再调用工具获取更多模拟数据，然后再输出 Final Answer。{unused_hint}"
+    "【주의】 지금까지 도구를 {tool_calls_count}번 밖에 호출하지 않았습니다. 최소 {min_tool_calls}번의 호출이 필요합니다. "
+    "반드시 도구를 추가로 호출하여 더 많은 시뮬레이션 데이터를 수집한 다음에서야 Final Answer를 출력해주세요.{unused_hint}"
 )
 
 REACT_INSUFFICIENT_TOOLS_MSG_ALT = (
-    "当前只调用了 {tool_calls_count} 次工具，至少需要 {min_tool_calls} 次。"
-    "请调用工具获取模拟数据。{unused_hint}"
+    "현재까지 도구를 단 {tool_calls_count}번만 호출했습니다. 챕터 작성을 위해 최소 {min_tool_calls}번의 도구 호출이 필수입니다. "
+    "제발 임의로 내용을 지어내지 말고, 먼저 도구를 호출하여 시뮬레이션 데이터를 가져오세요.{unused_hint}"
 )
 
 REACT_TOOL_LIMIT_MSG = (
-    "工具调用次数已达上限（{tool_calls_count}/{max_tool_calls}），不能再调用工具。"
-    '请立即基于已获取的信息，以 "Final Answer:" 开头输出章节内容。'
+    "도구 호출 횟수가 상한선에 도달했습니다({tool_calls_count}/{max_tool_calls}). 더 이상 도구를 호출할 수 없습니다. "
+    '즉시 지금까지 수집한 정보만을 기반으로, "Final Answer:"로 시작하여 챕터 내용을 출력하세요.'
 )
 
-REACT_UNUSED_TOOLS_HINT = "\n💡 你还没有使用过: {unused_list}，建议尝试不同工具获取多角度信息"
+REACT_UNUSED_TOOLS_HINT = "\n💡 아직 사용하지 않은 도구가 있습니다: {unused_list}. 더 다양한 관점의 정보를 얻기 위해 새로운 도구를 시도해 보세요."
 
-REACT_FORCE_FINAL_MSG = "已达到工具调用限制，请直接输出 Final Answer: 并生成章节内容。"
+REACT_FORCE_FINAL_MSG = "도구 호출 제한에 완전히 도달했습니다. 더 이상의 생각이나 변명 없이 즉시 Final Answer: 를 출력하고 챕터 내용을 생성하세요."
 
 # ── Chat prompt ──
 
@@ -950,6 +984,13 @@ class ReportAgent:
                     "interview_topic": "采访主题或需求描述（如：'了解学生对宿舍甲醛事件的看法'）",
                     "max_agents": "最多采访的Agent数量（可选，默认5，最大10）"
                 }
+            },
+            "tool_market_analysis": {
+                "name": "tool_market_analysis",
+                "description": "【주식 시장 데이터 조회】 주어진 종목 코드(Ticker)의 최근 OHLCV 및 기술적 통계(MACD, RSI)를 조회하고 요약을 반환합니다. (예: 삼성전자는 '005930.KS', 알파벳은 'GOOGL')",
+                "parameters": {
+                    "ticker": "조회할 주식 종목 코드 (예: AAPL, TSLA, 005930.KS)"
+                }
             }
         }
     
@@ -1020,6 +1061,16 @@ class ReportAgent:
                 )
                 return result.to_text()
             
+            elif tool_name == "tool_market_analysis":
+                ticker = parameters.get("ticker", "")
+                if not ticker:
+                    return "Error: ticker parameter is missing."
+                from app.services.market_data_service import MarketDataService
+                df = MarketDataService.fetch_ohlcv(ticker, period_days=90)
+                df = MarketDataService.calculate_technical_indicators(df)
+                summary = MarketDataService.generate_market_summary(ticker, df)
+                return summary
+            
             # ========== 向后兼容的旧工具（内部重定向到新工具） ==========
             
             elif tool_name == "search_graph":
@@ -1062,7 +1113,7 @@ class ReportAgent:
             return f"工具执行失败: {str(e)}"
     
     # 合法的工具名称集合，用于裸 JSON 兜底解析时校验
-    VALID_TOOL_NAMES = {"insight_forge", "panorama_search", "quick_search", "interview_agents"}
+    VALID_TOOL_NAMES = {"insight_forge", "panorama_search", "quick_search", "interview_agents", "tool_market_analysis"}
 
     def _parse_tool_calls(self, response: str) -> List[Dict[str, Any]]:
         """
@@ -1074,36 +1125,65 @@ class ReportAgent:
         """
         tool_calls = []
 
-        # 格式1: XML风格（标准格式）
-        xml_pattern = r'<tool_call>\s*(\{.*?\})\s*</tool_call>'
-        for match in re.finditer(xml_pattern, response, re.DOTALL):
+        # 格式1: XML风格（标准格式）- 处理 내부 에 ```json 이나 불필요한 설명이 포함된 경우
+        # 更加宽松的 정규식: <tool_call> 태그 앞뒤의 공백 및 따옴표 변동성 허용
+        xml_pattern = r'<tool_call>\s*([\s\S]*?)\s*</tool_call>'
+        for match in re.finditer(xml_pattern, response):
+            content = match.group(1).strip()
+            # 清理 가능한 모든 형태의 코드 블록 마커 제거
+            content = re.sub(r'```(?:json)?', '', content, flags=re.IGNORECASE).strip()
+            
             try:
-                call_data = json.loads(match.group(1))
+                # JSON 내부에 제어문자가 포함되어 있을 경우를 대비한 처리 (strict=False)
+                call_data = json.loads(content, strict=False)
                 tool_calls.append(call_data)
             except json.JSONDecodeError:
-                pass
+                # 부분적인 JSON이라도 추출 시도 (가끔 LLM이 주석을 달 때가 있음)
+                json_match = re.search(r'\{(?:[^{}]|(?R))*\}', content)
+                if json_match:
+                    try:
+                        call_data = json.loads(json_match.group(0), strict=False)
+                        tool_calls.append(call_data)
+                    except:
+                        pass
+                else:
+                    # 마지막 시도: 중괄호 { } 사이의 내용만이라도 추출 시도
+                    json_guess = re.search(r'(\{.*\})', content, re.DOTALL)
+                    if json_guess:
+                        try:
+                            call_data = json.loads(json_guess.group(1), strict=False)
+                            tool_calls.append(call_data)
+                        except:
+                            pass
 
         if tool_calls:
             return tool_calls
 
         # 格式2: 兜底 - LLM 直接输出裸 JSON（没包 <tool_call> 标签）
-        # 只在格式1未匹配时尝试，避免误匹配正文中的 JSON
         stripped = response.strip()
-        if stripped.startswith('{') and stripped.endswith('}'):
+        # 清理整体的 markdown 代码块标记
+        cleaned_stripped = re.sub(r'^```(?:json)?\s*\n?', '', stripped, flags=re.IGNORECASE)
+        cleaned_stripped = re.sub(r'\n?```\s*$', '', cleaned_stripped)
+        cleaned_stripped = cleaned_stripped.strip()
+
+        if cleaned_stripped.startswith('{') and cleaned_stripped.endswith('}'):
             try:
-                call_data = json.loads(stripped)
+                call_data = json.loads(cleaned_stripped)
                 if self._is_valid_tool_call(call_data):
                     tool_calls.append(call_data)
                     return tool_calls
             except json.JSONDecodeError:
                 pass
 
-        # 响应可能包含思考文字 + 裸 JSON，尝试提取最后一个 JSON 对象
-        json_pattern = r'(\{"(?:name|tool)"\s*:.*?\})\s*$'
-        match = re.search(json_pattern, stripped, re.DOTALL)
+        # 响应可能包含思考文字 + 裸 JSON，尝试提取最后一个可能有效的 JSON 块
+        # 使用正则表达式寻找带有 "name" 或 "tool" 键的 JSON 开始
+        json_pattern = r'(\{"(?:name|tool)"\s*:[\s\S]*\})\s*$'
+        match = re.search(json_pattern, cleaned_stripped)
         if match:
+            json_str = match.group(1).strip()
+            json_str = re.sub(r'\n?```\s*$', '', json_str).strip()
             try:
-                call_data = json.loads(match.group(1))
+                call_data = json.loads(json_str)
                 if self._is_valid_tool_call(call_data):
                     tool_calls.append(call_data)
             except json.JSONDecodeError:
@@ -1207,17 +1287,75 @@ class ReportAgent:
             
         except Exception as e:
             logger.error(t('report.outlinePlanFailed', error=str(e)))
-            # 返回默认大纲（3个章节，作为fallback）
+            # 기본 대시보드 구조 (3개 챕터, 폴백용)
             return ReportOutline(
-                title="未来预测报告",
-                summary="基于模拟预测的未来趋势与风险分析",
+                title="미래 예측 보고서",
+                summary="시뮬레이션 예측 기반 미래 동향 및 리스크 분석",
                 sections=[
-                    ReportSection(title="预测场景与核心发现"),
-                    ReportSection(title="人群行为预测分析"),
-                    ReportSection(title="趋势展望与风险提示")
+                    ReportSection(title="예측 시나리오 및 핵심 발견"),
+                    ReportSection(title="군중 행동 예측 분석"),
+                    ReportSection(title="동향 전망 및 리스크 경고")
                 ]
             )
     
+    def _extract_ticker_from_requirement(self) -> Optional[str]:
+        """
+        시뮬레이션 요구사항에서 [Quant Target Ticker: XXX] 형태의 티커를 추출합니다.
+        """
+        import re
+        match = re.search(r'\[Quant Target Ticker:\s*([^\]]+)\]', self.simulation_requirement)
+        if match:
+            return match.group(1).strip()
+        return None
+
+    def _auto_select_tool(self, section_title: str, tool_calls_count: int, used_tools: set) -> Optional[Dict[str, Any]]:
+        """
+        LLM이 도구를 호출하지 않을 때, 챕터 제목과 상황에 따라 자동으로 적절한 도구를 선택합니다.
+        
+        Returns:
+            도구 호출 정보 dict 또는 None
+        """
+        ticker = self._extract_ticker_from_requirement()
+        title_lower = section_title.lower()
+        
+        # 주가/차트/매수/매도 관련 챕터이고, ticker가 있고, market_analysis를 아직 안 썼으면
+        has_stock_keywords = any(kw in title_lower for kw in ['주가', '가격', '매수', '매도', '시장', '차트', '퀀트', 'quant', '시그널', '신호'])
+        if ticker and 'tool_market_analysis' not in used_tools and has_stock_keywords:
+            return {
+                "name": "tool_market_analysis",
+                "parameters": {"ticker": ticker}
+            }
+        
+        # 아직 insight_forge 안 썼으면 우선 사용
+        if 'insight_forge' not in used_tools:
+            return {
+                "name": "insight_forge",
+                "parameters": {"query": f"{section_title} 관련 핵심 동향과 Agent 반응"}
+            }
+        
+        # panorama_search 안 썼으면
+        if 'panorama_search' not in used_tools:
+            return {
+                "name": "panorama_search",
+                "parameters": {"query": f"{section_title} 사건 전개 및 진화 과정"}
+            }
+        
+        # quick_search 안 썼으면
+        if 'quick_search' not in used_tools:
+            return {
+                "name": "quick_search",
+                "parameters": {"query": section_title}
+            }
+        
+        # ticker가 있고 아직 market_analysis 안 썼으면 (주가 키워드 없어도)
+        if ticker and 'tool_market_analysis' not in used_tools:
+            return {
+                "name": "tool_market_analysis",
+                "parameters": {"ticker": ticker}
+            }
+        
+        return None
+
     def _generate_section_react(
         self, 
         section: ReportSection,
@@ -1235,6 +1373,8 @@ class ReportAgent:
         3. Observation（观察）- 分析工具返回结果
         4. 重复直到信息足够或达到最大次数
         5. Final Answer（最终回答）- 生成章节内容
+        
+        改善: LLM이 <tool_call> 태그를 출력하지 않는 경우에 대한 자동 도구 호출 Fallback 로직 포함
         
         Args:
             section: 要生成的章节
@@ -1282,16 +1422,66 @@ class ReportAgent:
             {"role": "user", "content": user_prompt}
         ]
         
+        # ═══ 自動 첫 도구 호출 주입 (Assistant Prefilling) ═══
+        # LLM이 도구를 거부하는 것을 방지하기 위해, 첫 번째 도구 호출을 시스템이 직접 수행합니다.
+        first_auto_tool = self._auto_select_tool(section.title, 0, set())
+        if first_auto_tool:
+            logger.info(f"자동 첫 도구 호출 주입: {first_auto_tool['name']} for section '{section.title}'")
+            
+            # 도구 실행
+            first_result = self._execute_tool(
+                first_auto_tool["name"],
+                first_auto_tool.get("parameters", {}),
+                report_context=f"챕터: {section.title}\n시뮬레이션: {self.simulation_requirement}"
+            )
+            
+            # assistant 메시지로 도구 호출을 주입
+            auto_assistant_msg = (
+                f"Thought: 이 챕터를 작성하기 위해 먼저 시뮬레이션 데이터를 수집하겠습니다.\n"
+                f'<tool_call>\n'
+                f'{json.dumps(first_auto_tool, ensure_ascii=False)}\n'
+                f'</tool_call>'
+            )
+            messages.append({"role": "assistant", "content": auto_assistant_msg})
+            
+            # observation을 user 메시지로 주입
+            first_observation = REACT_OBSERVATION_TEMPLATE.format(
+                tool_name=first_auto_tool["name"],
+                result=first_result,
+                tool_calls_count=1,
+                max_tool_calls=self.MAX_TOOL_CALLS_PER_SECTION,
+                used_tools_str=first_auto_tool["name"],
+                unused_hint=f"\n💡 아직 사용하지 않은 도구가 있습니다. 더 다양한 관점의 정보를 얻기 위해 새로운 도구를 시도해 보세요."
+            )
+            messages.append({"role": "user", "content": first_observation})
+            
+            if self.report_logger:
+                self.report_logger.log_tool_call(
+                    section_title=section.title,
+                    section_index=section_index,
+                    tool_name=first_auto_tool["name"],
+                    parameters=first_auto_tool.get("parameters", {}),
+                    iteration=0
+                )
+                self.report_logger.log_tool_result(
+                    section_title=section.title,
+                    section_index=section_index,
+                    tool_name=first_auto_tool["name"],
+                    result=first_result,
+                    iteration=0
+                )
+        
         # ReACT循环
-        tool_calls_count = 0
+        tool_calls_count = 1 if first_auto_tool else 0  # 자동 호출이 있었으면 1부터 시작
         max_iterations = 5  # 最大迭代轮数
         min_tool_calls = 3  # 最少工具调用次数
         conflict_retries = 0  # 工具调用与Final Answer同时出现的连续冲突次数
-        used_tools = set()  # 记录已调用过的工具名
-        all_tools = {"insight_forge", "panorama_search", "quick_search", "interview_agents"}
+        used_tools = {first_auto_tool["name"]} if first_auto_tool else set()  # 记录已调用过的工具名
+        all_tools = {"insight_forge", "panorama_search", "quick_search", "interview_agents", "tool_market_analysis"}
+        consecutive_no_tool_count = 0  # LLM이 연속으로 도구를 호출하지 않은 횟수
 
         # 报告上下文，用于InsightForge的子问题生成
-        report_context = f"章节标题: {section.title}\n模拟需求: {self.simulation_requirement}"
+        report_context = f"章节标题: {section.title}\n模拟需요: {self.simulation_requirement}"
         
         for iteration in range(max_iterations):
             if progress_callback:
@@ -1446,6 +1636,7 @@ class ReportAgent:
 
                 tool_calls_count += 1
                 used_tools.add(call['name'])
+                consecutive_no_tool_count = 0  # 도구 호출 성공 시 카운터 리셋
 
                 # 构建未使用工具提示
                 unused_tools = all_tools - used_tools
@@ -1469,8 +1660,60 @@ class ReportAgent:
 
             # ── 情况3：既没有工具调用，也没有 Final Answer ──
             messages.append({"role": "assistant", "content": response})
+            consecutive_no_tool_count += 1
 
             if tool_calls_count < min_tool_calls:
+                # ═══ Fallback 자동 도구 호출 ═══
+                # LLM이 2회 연속 도구를 호출하지 않으면, 시스템이 자동으로 도구를 호출합니다.
+                if consecutive_no_tool_count >= 2 and tool_calls_count < self.MAX_TOOL_CALLS_PER_SECTION:
+                    auto_tool = self._auto_select_tool(section.title, tool_calls_count, used_tools)
+                    if auto_tool:
+                        logger.info(f"Fallback 자동 도구 호출: {auto_tool['name']} (LLM이 {consecutive_no_tool_count}회 연속 도구 미호출)")
+                        
+                        result = self._execute_tool(
+                            auto_tool["name"],
+                            auto_tool.get("parameters", {}),
+                            report_context=report_context
+                        )
+                        
+                        if self.report_logger:
+                            self.report_logger.log_tool_call(
+                                section_title=section.title,
+                                section_index=section_index,
+                                tool_name=auto_tool["name"],
+                                parameters=auto_tool.get("parameters", {}),
+                                iteration=iteration + 1
+                            )
+                            self.report_logger.log_tool_result(
+                                section_title=section.title,
+                                section_index=section_index,
+                                tool_name=auto_tool["name"],
+                                result=result,
+                                iteration=iteration + 1
+                            )
+                        
+                        tool_calls_count += 1
+                        used_tools.add(auto_tool["name"])
+                        consecutive_no_tool_count = 0
+                        
+                        unused_tools = all_tools - used_tools
+                        unused_hint = ""
+                        if unused_tools and tool_calls_count < self.MAX_TOOL_CALLS_PER_SECTION:
+                            unused_hint = REACT_UNUSED_TOOLS_HINT.format(unused_list="、".join(unused_tools))
+                        
+                        messages.append({
+                            "role": "user",
+                            "content": REACT_OBSERVATION_TEMPLATE.format(
+                                tool_name=auto_tool["name"],
+                                result=result,
+                                tool_calls_count=tool_calls_count,
+                                max_tool_calls=self.MAX_TOOL_CALLS_PER_SECTION,
+                                used_tools_str=", ".join(used_tools),
+                                unused_hint=unused_hint,
+                            ),
+                        })
+                        continue
+                
                 # 工具调用次数不足，推荐未用过的工具
                 unused_tools = all_tools - used_tools
                 unused_hint = f"（这些工具还未使用，推荐用一下他们: {', '.join(unused_tools)}）" if unused_tools else ""

@@ -33,3 +33,12 @@ python-dotenv>=1.0.0
 
 # 数据验证
 pydantic>=2.0.0
+
+# ============= PRISM Quant Data =============
+# 주가 데이터 수집 (야후 파이낸스, 네이버 금융)
+yfinance>=0.2.37
+finance-datareader>=0.9.60
+
+# 데이터 조작 및 기술적 분석 알고리즘
+pandas>=2.0.0
+ta>=0.11.0

@@ -3,37 +3,84 @@
 </template>
 
 <script setup>
-// 使用 Vue Router 来管理页面
+// PRISM - AI Prediction Engine
 </script>
 
 <style>
-/* 🌐 GLOBAL CSS VARIABLES - JARVIS CYBERPUNK THEME */
+/* 🌐 GLOBAL CSS VARIABLES - PRISM DESIGN SYSTEM */
 :root {
-  --bg-deep: #050814;
-  --bg-panel: rgba(13, 17, 33, 0.7);
-  --bg-panel-border: rgba(0, 242, 254, 0.15);
+  /* ═══ Deep space backgrounds ═══ */
+  --bg-deep: #02000a;
+  --bg-surface: #080414;
+  --bg-panel: rgba(8, 4, 24, 0.75);
+  --bg-panel-hover: rgba(12, 6, 32, 0.85);
+  --bg-panel-border: rgba(60, 120, 255, 0.15);
+  --bg-panel-border-hover: rgba(60, 120, 255, 0.35);
   
-  --text-main: #e2e8f0;
-  --text-muted: #94a3b8;
+  /* ═══ Text hierarchy ═══ */
+  --text-main: #e8ecf4;
+  --text-secondary: #a0aec0;
+  --text-muted: #64748b;
+  --text-accent: #7eb8ff;
   
-  --cyan-primary: #00f2fe;
-  --cyan-glow: 0 0 10px rgba(0, 242, 254, 0.4), 0 0 20px rgba(0, 242, 254, 0.2);
-  --cyan-glow-strong: 0 0 15px rgba(0, 242, 254, 0.6), 0 0 30px rgba(0, 242, 254, 0.4);
+  /* ═══ Primary: Electric Blue Spectrum ═══ */
+  --blue-50: #e6f0ff;
+  --blue-100: #b3d4ff;
+  --blue-200: #80b8ff;
+  --blue-300: #4d9cff;
+  --blue-400: #1a80ff;
+  --blue-500: #0066ff;
+  --blue-600: #0052cc;
+  --blue-700: #003d99;
+  --blue-800: #002966;
+  --blue-900: #001433;
   
-  --accent-blue: #1e3a8a;
-  --accent-blue-glow: 0 0 10px rgba(30, 58, 138, 0.6);
+  /* ═══ Accent: Prism refraction colors ═══ */
+  --prism-blue: #3c78ff;
+  --prism-indigo: #6366f1;
+  --prism-violet: #8b5cf6;
+  --prism-cyan: #22d3ee;
+  --prism-white: #f0f6ff;
+
+  /* ═══ Glows & Shadows ═══ */
+  --glow-blue: 0 0 12px rgba(60, 120, 255, 0.4), 0 0 24px rgba(60, 120, 255, 0.2);
+  --glow-blue-strong: 0 0 20px rgba(60, 120, 255, 0.6), 0 0 40px rgba(60, 120, 255, 0.3);
+  --glow-prism: 0 0 12px rgba(99, 102, 241, 0.4), 0 0 24px rgba(60, 120, 255, 0.2);
+  --glow-prism-strong: 0 0 20px rgba(99, 102, 241, 0.6), 0 0 40px rgba(60, 120, 255, 0.3), 0 0 60px rgba(139, 92, 246, 0.15);
+  --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
   
-  --alert-red: #ff2a55;
-  --alert-red-glow: 0 0 10px rgba(255, 42, 85, 0.4);
+  /* ═══ Semantic colors ═══ */
+  --success: #10b981;
+  --success-glow: 0 0 10px rgba(16, 185, 129, 0.4);
+  --warning: #f59e0b;
+  --warning-glow: 0 0 10px rgba(245, 158, 11, 0.4);
+  --error: #ef4444;
+  --error-glow: 0 0 10px rgba(239, 68, 68, 0.4);
   
-  --success-green: #00ff9d;
+  /* ═══ Legacy compatibility aliases ═══ */
+  --cyan-primary: var(--prism-blue);
+  --cyan-glow: var(--glow-blue);
+  --cyan-glow-strong: var(--glow-blue-strong);
+  --accent-blue: var(--blue-700);
+  --accent-blue-glow: var(--glow-blue);
+  --alert-red: var(--error);
+  --alert-red-glow: var(--error-glow);
+  --success-green: var(--success);
   
-  --font-cyber: 'Orbitron', 'Space Grotesk', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  /* ═══ Typography ═══ */
+  --font-display: 'Exo 2', 'Rajdhani', sans-serif;
+  --font-cyber: 'Exo 2', 'Orbitron', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   --font-main: 'Inter', 'Noto Sans KR', sans-serif;
+  
+  /* ═══ Spacing & Radius ═══ */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
 }
 
-/* 全局样式重置 - Global Style Reset */
+/* Global Style Reset */
 * {
   margin: 0;
   padding: 0;
@@ -43,13 +90,18 @@
 body {
   background-color: var(--bg-deep);
   color: var(--text-main);
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.05) 0%, transparent 50%),
-    linear-gradient(to bottom, rgba(5, 8, 20, 0.9) 0%, var(--bg-deep) 100%);
-  background-attachment: fixed;
   font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  
+  /* Deep space mesh gradient */
+  background-image: 
+    radial-gradient(ellipse at 20% 0%, rgba(60, 120, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 10%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 100%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg-deep) 0%, #04001a 100%);
+  background-attachment: fixed;
 }
 
 #app {
@@ -58,42 +110,72 @@ body {
   flex-direction: column;
 }
 
-/* 滚动条样式 - Cyborg Scrollbar */
+/* Cyborg Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-deep);
-  border-left: 1px solid rgba(255,255,255,0.05);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 242, 254, 0.3);
-  border-radius: 3px;
+  background: rgba(60, 120, 255, 0.25);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--cyan-primary);
-  box-shadow: var(--cyan-glow);
+  background: var(--prism-blue);
+  box-shadow: var(--glow-blue);
 }
 
-/* Base button resets */
+/* Base button reset */
 button {
   font-family: inherit;
   outline: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Global Glass View Transition Class (Reusable) */
+/* Glass Panel (Reusable) */
 .glass-panel {
   background: var(--bg-panel);
   border: 1px solid var(--bg-panel-border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 8px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-deep);
+}
+
+.glass-panel:hover {
+  border-color: var(--bg-panel-border-hover);
+}
+
+/* Global Animations */
+@keyframes prism-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes prism-glow {
+  0%, 100% { box-shadow: var(--glow-blue); }
+  50% { box-shadow: var(--glow-blue-strong); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(60, 120, 255, 0.3);
+  color: var(--prism-white);
 }
 </style>

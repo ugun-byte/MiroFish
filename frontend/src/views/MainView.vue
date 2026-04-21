@@ -3,7 +3,7 @@
     <!-- Header -->
     <header class="app-header">
       <div class="header-left">
-        <div class="brand" @click="router.push('/')">MIROFISH</div>
+        <div class="brand" @click="router.push('/')"><span class="brand-icon">◆</span> PRISM</div>
       </div>
       
       <div class="header-center">
@@ -439,11 +439,23 @@ onUnmounted(() => {
 }
 
 .brand {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-display, 'Exo 2', sans-serif);
   font-weight: 800;
   font-size: 18px;
-  letter-spacing: 1px;
+  letter-spacing: 3px;
   cursor: pointer;
+  background: linear-gradient(135deg, var(--prism-blue, #3c78ff), var(--prism-indigo, #6366f1));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-icon {
+  -webkit-text-fill-color: var(--prism-blue, #3c78ff);
+  font-size: 14px;
+  filter: drop-shadow(0 0 6px rgba(60, 120, 255, 0.5));
 }
 
 .view-switcher {

@@ -2,7 +2,7 @@
   <div class="process-page">
     <!-- 顶部导航栏 -->
     <nav class="navbar">
-      <div class="nav-brand" @click="goHome">MIROFISH</div>
+      <div class="nav-brand" @click="goHome"><span style="color: var(--prism-blue, #3c78ff); filter: drop-shadow(0 0 6px rgba(60,120,255,0.5)); margin-right: 6px;">◆</span>PRISM</div>
       
       <!-- 中间步骤指示器 -->
       <div class="nav-center">

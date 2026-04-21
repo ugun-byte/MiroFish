@@ -26,8 +26,8 @@
     "files": "파일"
   },
   "meta": {
-    "title": "MiroFish - 만물 예측 시스템",
-    "description": "MiroFish - 소셜 미디어 여론 시뮬레이션 시스템"
+    "title": "PRISM — AI 예측 시뮬레이션 엔진",
+    "description": "PRISM — AI 기반 여론 시뮬레이션 & 예측 플랫폼"
   },
   "nav": {
     "visitGithub": "Github 방문하기"
@@ -38,7 +38,7 @@
     "heroTitle1": "보고서를 업로드하고,",
     "heroTitle2": "미래를 예측하세요",
     "heroDesc": "단일 문서에서 {brand}가 현실의 모티브를 추출하여 최대 {agentScale}의 병렬 세계를 자동 생성합니다. 전지적 관점에서 변수를 주입하고 복잡한 집단 역학 속에서 {optimalSolution}을 찾아냅니다.",
-    "heroDescBrand": "MiroFish",
+    "heroDescBrand": "PRISM",
     "heroDescAgentScale": "수백만 개의 에이전트",
     "heroDescOptimalSolution": "\"최적의 해답\"",
     "slogan": "에이전트가 미래를 리허설하게 하여 결정을 승리로 이끄세요",
@@ -67,7 +67,7 @@
     "inputParams": "입력 파라미터",
     "simulationPrompt": ">_ 02 / 시뮬레이션 요구사항",
     "promptPlaceholder": "// 자연어로 시뮬레이션 또는 예측 요구사항을 요약하여 설명하세요",
-    "engineBadge": "엔진: MiroFish-V1.0",
+    "engineBadge": "엔진: PRISM-V2.0",
     "startEngine": "엔진 시동",
     "initializing": "초기화 중..."
   },
@@ -151,7 +151,7 @@
     "setupComplete": "환경 설정 완료",
     "setupCompleteDesc": "이제 시뮬레이션을 시작할 수 있습니다.",
     "roundsConfig": "시뮬레이션 라운드 설정",
-    "roundsConfigDesc": "MiroFish는 자동으로 {hours} 시간(현실 세계 시간 기준)을 계획, 각 턴은 {minutesPerRound}분에 해당합니다",
+    "roundsConfigDesc": "PRISM은 자동으로 {hours} 시간(현실 세계 시간 기준)을 계획, 각 턴은 {minutesPerRound}분에 해당합니다",
     "customToggle": "사용자 지정",
     "roundsUnit": "라운드",
     "estimatedDuration": "100에이전트 기준: 예측 소요시간 ~{minutes}분",
@@ -670,5 +670,15 @@
     "llmSelectAgentFailed": "시민 대상 색출이 LLM쪽 문제로 늦어져 그냥 눈먼 아무나 붙잡음: {error}",
     "generateInterviewQuestionsFailed": "질문을 만들어낼 수 없슴다: {error}",
     "generateInterviewSummaryFailed": "결론 요약 에러: {error}"
+  },
+  "settings": {
+    "title": "LLM 모델 설정",
+    "quickPreset": "빠른 프리셋",
+    "manualConfig": "수동 설정",
+    "apiKeyPlaceholder": "API Key를 입력하세요...",
+    "save": "저장",
+    "saving": "저장 중...",
+    "configSaved": "설정이 저장되었습니다",
+    "configFailed": "설정 저장 실패"
   }
 }

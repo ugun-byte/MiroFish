@@ -48,7 +48,7 @@
               
               <div class="section-body" v-show="!collapsedSections.has(idx)">
                 <!-- Completed Content -->
-                <div v-if="generatedSections[idx + 1]" class="generated-content" v-html="renderMarkdown(generatedSections[idx + 1])"></div>
+                <div v-if="generatedSections[idx + 1]" class="generated-content" v-html="generatedSections[idx + 1].html"></div>
                 
                 <!-- Loading State -->
                 <div v-else-if="currentSectionIndex === idx + 1" class="loading-state">
@@ -140,7 +140,7 @@
         </div>
 
         <div class="workflow-timeline">
-          <TransitionGroup name="timeline-item">
+          <div class="timeline-logs">
             <div 
               v-for="(log, idx) in displayLogs" 
               :key="log.timestamp + '-' + idx"
@@ -273,22 +273,22 @@
                       <div v-if="!showRawResult[log.timestamp]" class="result-structured">
                         <!-- Interview Agents - Special Display -->
                         <template v-if="log.details?.tool_name === 'interview_agents'">
-                          <InterviewDisplay :result="parseInterview(log.details.result)" :result-length="log.details?.result_length" />
+                          <InterviewDisplay :result="log.parsedResult" :result-length="log.details?.result_length" />
                         </template>
                         
                         <!-- Insight Forge -->
                         <template v-else-if="log.details?.tool_name === 'insight_forge'">
-                          <InsightDisplay :result="parseInsightForge(log.details.result)" :result-length="log.details?.result_length" />
+                          <InsightDisplay :result="log.parsedResult" :result-length="log.details?.result_length" />
                         </template>
                         
                         <!-- Panorama Search -->
                         <template v-else-if="log.details?.tool_name === 'panorama_search'">
-                          <PanoramaDisplay :result="parsePanorama(log.details.result)" :result-length="log.details?.result_length" />
+                          <PanoramaDisplay :result="log.parsedResult" :result-length="log.details?.result_length" />
                         </template>
                         
                         <!-- Quick Search -->
                         <template v-else-if="log.details?.tool_name === 'quick_search'">
-                          <QuickSearchDisplay :result="parseQuickSearch(log.details.result)" :result-length="log.details?.result_length" />
+                          <QuickSearchDisplay :result="log.parsedResult" :result-length="log.details?.result_length" />
                         </template>
                         
                         <!-- Default -->
@@ -363,7 +363,7 @@
                 </div>
               </div>
             </div>
-          </TransitionGroup>
+          </div>
 
           <!-- Empty State -->
           <div v-if="agentLogs.length === 0 && !isComplete" class="workflow-empty">
@@ -390,7 +390,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted, nextTick, h, reactive } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick, h, reactive, markRaw } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getAgentLog, getConsoleLog } from '../api/report'
@@ -2031,7 +2031,20 @@ const fetchAgentLog = async () => {
       const newLogs = res.data.logs || []
       
       if (newLogs.length > 0) {
-        newLogs.forEach(log => {
+        newLogs.forEach(rawLog => {
+          if (rawLog.action === 'tool_result' && rawLog.details && rawLog.details.result) {
+            const toolName = rawLog.details.tool_name
+            if (toolName === 'interview_agents') {
+                rawLog.parsedResult = parseInterview(rawLog.details.result)
+            } else if (toolName === 'insight_forge') {
+                rawLog.parsedResult = parseInsightForge(rawLog.details.result)
+            } else if (toolName === 'panorama_search') {
+                rawLog.parsedResult = parsePanorama(rawLog.details.result)
+            } else if (toolName === 'quick_search') {
+                rawLog.parsedResult = parseQuickSearch(rawLog.details.result)
+            }
+          }
+          const log = markRaw(rawLog)
           agentLogs.value.push(log)
           
           if (log.action === 'planning_complete' && log.details?.outline) {
@@ -2045,7 +2058,10 @@ const fetchAgentLog = async () => {
           // section_complete - 章节生成完成
           if (log.action === 'section_complete') {
             if (log.details?.content) {
-              generatedSections.value[log.section_index] = log.details.content
+              generatedSections.value[log.section_index] = {
+                raw: log.details.content,
+                html: renderMarkdown(log.details.content)
+              }
               // 自动展开刚生成的章节
               expandedContent.value.add(log.section_index - 1)
               currentSectionIndex.value = null
@@ -2140,6 +2156,9 @@ const fetchConsoleLog = async () => {
       
       if (newLogs.length > 0) {
         consoleLogs.value.push(...newLogs)
+        if (consoleLogs.value.length > 2000) {
+          consoleLogs.value = consoleLogs.value.slice(-2000)
+        }
         consoleLogLine.value = res.data.from_line + newLogs.length
         
         nextTick(() => {
